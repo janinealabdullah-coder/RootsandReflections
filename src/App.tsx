@@ -84,6 +84,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/timeline"
+              element={
+                <ProtectedRoute>
+                  <Timeline />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
