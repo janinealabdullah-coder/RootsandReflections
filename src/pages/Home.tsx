@@ -51,6 +51,7 @@ const features = [
 const Home = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { theme } = useTheme();
   const [family, setFamily] = useState<{ id: string; name: string } | null>(null);
   const [memberCount, setMemberCount] = useState(0);
   const [storyCount, setStoryCount] = useState(0);
