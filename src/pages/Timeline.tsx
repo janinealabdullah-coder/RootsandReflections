@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, BookOpen, Calendar, Search, X } from "lucide-react";
+import { ArrowLeft, BookOpen, Calendar, ChevronRight, Lock, Globe, Users, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Story {
   id: string;
@@ -14,6 +20,8 @@ interface Story {
   year: number | null;
   decade: string | null;
   photo_urls: string[] | null;
+  tagged_members: string[] | null;
+  privacy: string;
   author_id: string;
   created_at: string;
 }
@@ -24,6 +32,12 @@ const DECADE_ORDER = [
   "1920s", "Earlier",
 ];
 
+const privacyLabels: Record<string, { icon: typeof Users; label: string }> = {
+  "family-only": { icon: Users, label: "Family only" },
+  private: { icon: Lock, label: "Private" },
+  shareable: { icon: Globe, label: "Shareable" },
+};
+
 const Timeline = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -33,6 +47,7 @@ const Timeline = () => {
   const [members, setMembers] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
   const [authorFilter, setAuthorFilter] = useState<string | null>(null);
+  const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
   useEffect(() => {
     if (!family) return;
@@ -40,7 +55,7 @@ const Timeline = () => {
     const load = async () => {
       const { data } = await supabase
         .from("stories")
-        .select("id, title, content, year, decade, photo_urls, author_id, created_at")
+        .select("id, title, content, year, decade, photo_urls, tagged_members, privacy, author_id, created_at")
         .eq("family_id", family.familyId)
         .order("year", { ascending: false, nullsFirst: false });
 
@@ -205,13 +220,14 @@ const Timeline = () => {
                 {/* Stories in this decade */}
                 <div className="ml-[18px] pl-8 border-l-0 space-y-3">
                   {grouped[decade].map((story, si) => (
-                    <div
+                    <button
                       key={story.id}
-                      className="roots-card relative animate-fade-up"
+                      onClick={() => setSelectedStory(story)}
+                      className="roots-card relative animate-fade-up w-full text-left hover:shadow-md hover:border-primary/30 transition-all cursor-pointer group"
                       style={{ animationDelay: `${(di * 0.1) + (si * 0.05)}s`, opacity: 0 }}
                     >
                       {/* Connector dot */}
-                      <div className="absolute -left-[calc(2rem+5px)] top-5 w-2.5 h-2.5 rounded-full bg-muted-foreground/30 border-2 border-background" />
+                      <div className="absolute -left-[calc(2rem+5px)] top-5 w-2.5 h-2.5 rounded-full bg-muted-foreground/30 border-2 border-background group-hover:bg-primary/50 transition-colors" />
 
                       {/* Photo thumbnail */}
                       {story.photo_urls && story.photo_urls.length > 0 && (
@@ -232,18 +248,21 @@ const Timeline = () => {
                             {story.content}
                           </p>
                         </div>
-                        {story.year && (
-                          <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full shrink-0">
-                            {story.year}
-                          </span>
-                        )}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {story.year && (
+                            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                              {story.year}
+                            </span>
+                          )}
+                          <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
+                        </div>
                       </div>
 
                       <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                         <BookOpen className="w-3.5 h-3.5" />
                         <span>{members[story.author_id] || "Unknown"}</span>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -251,6 +270,81 @@ const Timeline = () => {
           </div>
         )}
       </div>
+
+      {/* Story detail dialog */}
+      <Dialog open={!!selectedStory} onOpenChange={(open) => !open && setSelectedStory(null)}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          {selectedStory && (() => {
+            const privacy = privacyLabels[selectedStory.privacy] || privacyLabels["family-only"];
+            const PrivacyIcon = privacy.icon;
+            const taggedNames = (selectedStory.tagged_members || [])
+              .map((uid) => members[uid])
+              .filter(Boolean);
+
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-display">
+                    {selectedStory.title}
+                  </DialogTitle>
+                </DialogHeader>
+
+                {/* Photos */}
+                {selectedStory.photo_urls && selectedStory.photo_urls.length > 0 && (
+                  <div className="space-y-2 -mx-2">
+                    {selectedStory.photo_urls.map((url, i) => (
+                      <div key={i} className="rounded-lg overflow-hidden">
+                        <img
+                          src={url}
+                          alt={`Photo ${i + 1}`}
+                          className="w-full h-auto max-h-72 object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Full content */}
+                <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                  {selectedStory.content}
+                </p>
+
+                {/* Tagged members */}
+                {taggedNames.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {taggedNames.map((name) => (
+                      <span
+                        key={name}
+                        className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"
+                      >
+                        {name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Metadata */}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground border-t pt-3">
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4" />
+                    {members[selectedStory.author_id] || "Unknown"}
+                  </span>
+                  {(selectedStory.year || selectedStory.decade) && (
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4" />
+                      {selectedStory.year || selectedStory.decade}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1.5">
+                    <PrivacyIcon className="w-4 h-4" />
+                    {privacy.label}
+                  </span>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
