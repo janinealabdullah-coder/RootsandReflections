@@ -54,7 +54,7 @@ const Timeline = () => {
     const load = async () => {
       const { data } = await supabase
         .from("stories")
-        .select("id, title, content, year, decade, photo_urls, author_id, created_at")
+        .select("id, title, content, year, decade, photo_urls, tagged_members, privacy, author_id, created_at")
         .eq("family_id", family.familyId)
         .order("year", { ascending: false, nullsFirst: false });
 
