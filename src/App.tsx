@@ -11,6 +11,7 @@ import JoinFamily from "./pages/JoinFamily";
 import Home from "./pages/Home";
 import Stories from "./pages/Stories";
 import Capsules from "./pages/Capsules";
+import Timeline from "./pages/Timeline";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -80,6 +81,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Capsules />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/timeline"
+              element={
+                <ProtectedRoute>
+                  <Timeline />
                 </ProtectedRoute>
               }
             />
