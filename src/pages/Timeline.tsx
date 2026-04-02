@@ -46,6 +46,7 @@ const Timeline = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
+  const [authorFilter, setAuthorFilter] = useState<string | null>(null);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
   useEffect(() => {
