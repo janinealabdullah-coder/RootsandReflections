@@ -46,7 +46,7 @@ const Auth = () => {
           password,
         });
         if (error) throw error;
-        navigate("/");
+        navigate(nextUrl);
       }
     } catch (error: any) {
       toast({

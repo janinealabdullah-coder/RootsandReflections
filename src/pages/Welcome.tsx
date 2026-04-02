@@ -6,7 +6,14 @@ import logo from "@/assets/logo.jpeg";
 
 const Welcome = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  // Redirect logged-in users straight to dashboard
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/home", { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   const handleStart = () => {
     if (user) {
