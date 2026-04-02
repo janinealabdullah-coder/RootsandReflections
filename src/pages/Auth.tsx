@@ -279,7 +279,7 @@ const Auth = () => {
           {appleLoading ? "Please wait..." : "Continue with Apple"}
         </Button>
 
-
+        {!isSignUp && (
           <div className="text-center">
             <button
               type="button"
