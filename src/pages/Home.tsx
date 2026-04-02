@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -99,14 +100,17 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading your family...</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading your family...</p>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <PageLayout>
+      <div className="pb-8">
       <div className="bg-card border-b px-5 py-6">
         <div className="max-w-lg mx-auto flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -174,7 +178,8 @@ const Home = () => {
           </button>
         ))}
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

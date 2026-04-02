@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-5">
+    <PageLayout>
+      <div className="min-h-screen flex items-center justify-center px-5">
       <div className="w-full max-w-sm space-y-8 animate-fade-up">
         <div className="text-center">
           <h1 className="roots-heading-2">
@@ -121,7 +123,8 @@ const Auth = () => {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

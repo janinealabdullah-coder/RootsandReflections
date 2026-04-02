@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -176,9 +177,11 @@ const FamilyTree = () => {
 
   if (familyLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading family tree…</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading family tree…</p>
+        </div>
+      </PageLayout>
     );
   }
 
@@ -186,7 +189,8 @@ const FamilyTree = () => {
   const hasConnections = relationships.length > 0;
 
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <PageLayout>
+      <div className="pb-12">
       <PageHeader
         title="Family Tree"
         actions={
@@ -338,7 +342,8 @@ const FamilyTree = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

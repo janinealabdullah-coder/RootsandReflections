@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -54,9 +55,11 @@ const Stories = () => {
 
   if (familyLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading stories...</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading stories...</p>
+        </div>
+      </PageLayout>
     );
   }
 
@@ -77,7 +80,8 @@ const Stories = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <PageLayout>
+      <div className="pb-8">
       <PageHeader title="Family Stories" />
 
       <div className="roots-container mt-6 space-y-4">
@@ -110,7 +114,8 @@ const Stories = () => {
           ))
         )}
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

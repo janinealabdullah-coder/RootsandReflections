@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -118,14 +119,17 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading profile…</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading profile…</p>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <PageLayout>
+      <div className="pb-12">
       <PageHeader title="Edit Profile" />
 
       <div className="max-w-lg mx-auto px-5 mt-8 space-y-8">
@@ -213,7 +217,8 @@ const Profile = () => {
           {saving ? "Saving…" : "Save Changes"}
         </Button>
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

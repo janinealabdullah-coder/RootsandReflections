@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -139,14 +140,17 @@ const Invites = () => {
 
   if (familyLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <PageLayout>
+      <div className="pb-12">
       <PageHeader
         title="Invite Links"
         actions={
@@ -283,7 +287,8 @@ const Invites = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

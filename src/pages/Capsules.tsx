@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -44,9 +45,11 @@ const Capsules = () => {
 
   if (familyLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading capsules…</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading capsules…</p>
+        </div>
+      </PageLayout>
     );
   }
 
@@ -73,7 +76,8 @@ const Capsules = () => {
   const isUnlockable = (dateStr: string) => isPast(parseISO(dateStr));
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <PageLayout>
+      <div className="pb-8">
       <PageHeader title="Memory Capsules" />
 
       <div className="roots-container mt-6 space-y-4">
@@ -151,7 +155,8 @@ const Capsules = () => {
           );
         })}
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 
