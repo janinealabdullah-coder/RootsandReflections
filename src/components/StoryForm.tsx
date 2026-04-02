@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import {
   Globe,
   Users,
   Check,
+  Lightbulb,
 } from "lucide-react";
 
 interface Member {
@@ -32,6 +33,31 @@ const PRIVACY_OPTIONS = [
   { value: "shareable", label: "Shareable", icon: Globe, desc: "Anyone with the link" },
 ];
 
+const GUIDED_PROMPTS = [
+  "Tell us about a holiday tradition your family has kept alive for years.",
+  "What's your earliest childhood memory? What makes it stick?",
+  "Describe a meal that brings your family together. Who cooked it?",
+  "Who is someone in your family you look up to, and why?",
+  "What's the funniest thing that ever happened at a family gathering?",
+  "Tell us about a place that holds special meaning for your family.",
+  "What's a lesson a grandparent or elder taught you?",
+  "Describe a moment when your family came together during a hard time.",
+  "What family recipe has been passed down, and what's the story behind it?",
+  "What's something about your family history that surprised you?",
+];
+
+const DRAFT_KEY = "roots-story-draft";
+
+interface DraftData {
+  title: string;
+  content: string;
+  year: string;
+  decade: string;
+  privacy: string;
+  taggedIds: string[];
+  savedAt: number;
+}
+
 const StoryForm = ({
   familyId,
   members,
@@ -48,15 +74,51 @@ const StoryForm = ({
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [year, setYear] = useState("");
-  const [decade, setDecade] = useState("");
-  const [privacy, setPrivacy] = useState("family-only");
-  const [taggedIds, setTaggedIds] = useState<string[]>([]);
+  // Load draft from localStorage
+  const loadDraft = (): Partial<DraftData> => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return {};
+  };
+
+  const draft = loadDraft();
+
+  const [title, setTitle] = useState(draft.title || "");
+  const [content, setContent] = useState(draft.content || "");
+  const [year, setYear] = useState(draft.year || "");
+  const [decade, setDecade] = useState(draft.decade || "");
+  const [privacy, setPrivacy] = useState(draft.privacy || "family-only");
+  const [taggedIds, setTaggedIds] = useState<string[]>(draft.taggedIds || []);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [showPrompts, setShowPrompts] = useState(false);
+  const [hasDraft, setHasDraft] = useState(!!draft.title || !!draft.content);
+
+  // Auto-save draft
+  const saveDraft = useCallback(() => {
+    const data: DraftData = {
+      title,
+      content,
+      year,
+      decade,
+      privacy,
+      taggedIds,
+      savedAt: Date.now(),
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  }, [title, content, year, decade, privacy, taggedIds]);
+
+  useEffect(() => {
+    const timer = setTimeout(saveDraft, 1000);
+    return () => clearTimeout(timer);
+  }, [saveDraft]);
+
+  const clearDraft = () => {
+    localStorage.removeItem(DRAFT_KEY);
+  };
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -85,6 +147,11 @@ const StoryForm = ({
         ? prev.filter((id) => id !== userIdToTag)
         : [...prev, userIdToTag]
     );
+  };
+
+  const usePrompt = (prompt: string) => {
+    setContent(prompt + "\n\n");
+    setShowPrompts(false);
   };
 
   const handleSubmit = async () => {
@@ -124,6 +191,23 @@ const StoryForm = ({
       });
 
       if (error) throw error;
+
+      // Send notification to all other family members about the new story
+      const authorMember = members.find((m) => m.user_id === userId);
+      const authorName = authorMember?.display_name || "Someone";
+      const otherMembers = members.filter((m) => m.user_id !== userId);
+
+      for (const member of otherMembers) {
+        await supabase.from("notifications").insert({
+          user_id: member.user_id,
+          family_id: familyId,
+          type: "new_story",
+          title: `${authorName} shared a new story`,
+          body: `"${title.trim()}"`,
+        });
+      }
+
+      clearDraft();
       onSuccess();
     } catch (error: any) {
       toast({ title: "Error saving story", description: error.message, variant: "destructive" });
@@ -152,6 +236,54 @@ const StoryForm = ({
       </div>
 
       <div className="roots-container mt-6 space-y-6">
+        {/* Draft indicator */}
+        {hasDraft && (
+          <div className="flex items-center justify-between bg-accent/10 border border-accent/30 rounded-xl px-4 py-2.5">
+            <p className="text-sm text-accent-foreground">
+              📝 Draft restored from last session
+            </p>
+            <button
+              onClick={() => {
+                clearDraft();
+                setTitle("");
+                setContent("");
+                setYear("");
+                setDecade("");
+                setPrivacy("family-only");
+                setTaggedIds([]);
+                setHasDraft(false);
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground underline"
+            >
+              Clear
+            </button>
+          </div>
+        )}
+
+        {/* Guided Prompts */}
+        <div>
+          <button
+            onClick={() => setShowPrompts(!showPrompts)}
+            className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+          >
+            <Lightbulb className="w-4 h-4" />
+            {showPrompts ? "Hide writing prompts" : "Need inspiration? Try a prompt"}
+          </button>
+          {showPrompts && (
+            <div className="mt-3 space-y-2">
+              {GUIDED_PROMPTS.map((prompt, i) => (
+                <button
+                  key={i}
+                  onClick={() => usePrompt(prompt)}
+                  className="w-full text-left roots-card py-3 px-4 text-sm text-foreground hover:border-primary/30 hover:shadow-sm transition-all"
+                >
+                  "{prompt}"
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Title */}
         <div className="space-y-3">
           <Label htmlFor="title" className="text-base font-semibold">
@@ -178,6 +310,9 @@ const StoryForm = ({
             onChange={(e) => setContent(e.target.value)}
             className="min-h-[180px] text-base px-4 py-3 resize-none"
           />
+          <p className="text-xs text-muted-foreground text-right">
+            Auto-saved as draft
+          </p>
         </div>
 
         {/* Photos */}
