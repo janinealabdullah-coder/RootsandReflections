@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
+import logoLight from "@/assets/logo-light.jpeg";
+import logoDark from "@/assets/logo-dark.jpeg";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
 
@@ -48,6 +51,7 @@ const features = [
 const Home = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { theme } = useTheme();
   const [family, setFamily] = useState<{ id: string; name: string } | null>(null);
   const [memberCount, setMemberCount] = useState(0);
   const [storyCount, setStoryCount] = useState(0);
@@ -105,7 +109,13 @@ const Home = () => {
     <div className="min-h-screen bg-background pb-8">
       <div className="bg-card border-b px-5 py-6">
         <div className="max-w-lg mx-auto flex items-start justify-between">
-          <div>
+          <div className="flex items-center gap-3">
+            <img
+              src={theme === "dark" ? logoDark : logoLight}
+              alt="Roots & Reflections"
+              className="h-10 w-10 rounded-lg object-cover"
+            />
+            <div>
             <p className="text-sm text-muted-foreground">Welcome back to</p>
             <h1 className="text-2xl font-display font-bold text-foreground">
               {family?.name}
@@ -114,6 +124,7 @@ const Home = () => {
               {memberCount} member{memberCount !== 1 ? "s" : ""} · {storyCount}{" "}
               stor{storyCount !== 1 ? "ies" : "y"}
             </p>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
