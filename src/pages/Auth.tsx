@@ -84,7 +84,7 @@ const Auth = () => {
 
   if (isForgotPassword) {
     return (
-      <PageLayout>
+      <PageLayout overlayOpacity="light">
         <div className="min-h-screen flex items-center justify-center px-5">
           <div className="w-full max-w-sm space-y-8 animate-fade-up">
             <div className="text-center">

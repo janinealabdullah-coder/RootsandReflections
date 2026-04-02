@@ -45,7 +45,7 @@ const Welcome = () => {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 50%, hsl(150, 25%, 78%) 100%)",
+              "linear-gradient(to bottom, transparent 70%, hsl(150, 25%, 78%) 100%)",
           }}
         />
       </div>
