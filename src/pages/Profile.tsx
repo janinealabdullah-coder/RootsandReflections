@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFamily } from "@/hooks/use-family";
 import { Camera, Loader2, User } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 const Profile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { family } = useFamily();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(true);
@@ -28,12 +30,17 @@ const Profile = () => {
     if (!user) return;
 
     const load = async () => {
-      const { data } = await supabase
+      const query = supabase
         .from("family_members")
         .select("id, display_name, birth_year, relationship, avatar_url")
-        .eq("user_id", user.id)
-        .limit(1)
-        .maybeSingle();
+        .eq("user_id", user.id);
+
+      // Scope to active family if available
+      if (family) {
+        query.eq("family_id", family.familyId);
+      }
+
+      const { data } = await query.limit(1).maybeSingle();
 
       if (data) {
         setMemberId(data.id);
@@ -46,7 +53,7 @@ const Profile = () => {
     };
 
     load();
-  }, [user]);
+  }, [user, family]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
