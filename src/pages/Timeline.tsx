@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, BookOpen, Calendar } from "lucide-react";
+import { ArrowLeft, BookOpen, Calendar, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Story {
   id: string;
@@ -30,6 +31,8 @@ const Timeline = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState<Record<string, string>>({});
+  const [search, setSearch] = useState("");
+  const [authorFilter, setAuthorFilter] = useState<string | null>(null);
 
   useEffect(() => {
     if (!family) return;
@@ -43,7 +46,6 @@ const Timeline = () => {
 
       setStories(data || []);
 
-      // Build author lookup
       const lookup: Record<string, string> = {};
       family.members.forEach((m) => {
         lookup[m.user_id] = m.display_name;
@@ -55,9 +57,26 @@ const Timeline = () => {
     load();
   }, [family]);
 
-  // Group stories by decade
+  // Filter stories
+  const filtered = useMemo(() => {
+    let result = stories;
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (s) =>
+          s.title.toLowerCase().includes(q) ||
+          s.content.toLowerCase().includes(q)
+      );
+    }
+    if (authorFilter) {
+      result = result.filter((s) => s.author_id === authorFilter);
+    }
+    return result;
+  }, [stories, search, authorFilter]);
+
+  // Group filtered stories by decade
   const grouped: Record<string, Story[]> = {};
-  stories.forEach((story) => {
+  filtered.forEach((story) => {
     const dec = story.decade || (story.year ? `${Math.floor(story.year / 10) * 10}s` : "Undated");
     if (!grouped[dec]) grouped[dec] = [];
     grouped[dec].push(story);
@@ -96,7 +115,63 @@ const Timeline = () => {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 mt-8">
+      {/* Search & filter bar */}
+      <div className="max-w-lg mx-auto px-5 mt-5 space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search stories…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 pr-9"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Author filter pills */}
+        {Object.keys(members).length > 1 && (
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setAuthorFilter(null)}
+              className={`text-xs px-3 py-1 rounded-full border transition-colors ${
+                !authorFilter
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-muted-foreground border-border hover:border-primary/50"
+              }`}
+            >
+              All
+            </button>
+            {Object.entries(members).map(([userId, name]) => (
+              <button
+                key={userId}
+                onClick={() => setAuthorFilter(authorFilter === userId ? null : userId)}
+                className={`text-xs px-3 py-1 rounded-full border transition-colors ${
+                  authorFilter === userId
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-muted-foreground border-border hover:border-primary/50"
+                }`}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {(search || authorFilter) && (
+          <p className="text-xs text-muted-foreground">
+            {filtered.length} result{filtered.length !== 1 ? "s" : ""} found
+          </p>
+        )}
+      </div>
+
+      <div className="max-w-lg mx-auto px-5 mt-6">
         {sortedDecades.length === 0 ? (
           <div className="text-center py-16 space-y-3">
             <Calendar className="w-12 h-12 mx-auto text-muted-foreground/40" />
