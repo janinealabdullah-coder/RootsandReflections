@@ -178,6 +178,7 @@ const Home = () => {
           </button>
         ))}
       </div>
+      </div>
     </PageLayout>
   );
 };
