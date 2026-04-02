@@ -13,6 +13,7 @@ import Stories from "./pages/Stories";
 import Capsules from "./pages/Capsules";
 import Timeline from "./pages/Timeline";
 import FamilyTree from "./pages/FamilyTree";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -98,6 +99,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <FamilyTree />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
