@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle } from "lucide-react";
+import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
 
@@ -34,6 +34,13 @@ const features = [
     description: "Write a message for the future",
     path: "/capsule",
     color: "bg-destructive/10 text-destructive",
+  },
+  {
+    icon: Link2,
+    label: "Invite Links",
+    description: "Manage family invite codes",
+    path: "/invites",
+    color: "bg-muted text-muted-foreground",
   },
 ];
 
