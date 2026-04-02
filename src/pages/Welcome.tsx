@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import heroTree from "@/assets/hero-tree.jpg";
+import logo from "@/assets/logo.jpeg";
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // If already logged in, go to family selection / creation
   const handleStart = () => {
     if (user) {
       navigate("/create-family");
@@ -26,23 +26,31 @@ const Welcome = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="relative w-full h-64 md:h-80 overflow-hidden">
+      {/* Hero Image — willow tree */}
+      <div className="relative w-full h-72 md:h-96 overflow-hidden">
         <img
           src={heroTree}
-          alt="A warm illustration of a family tree with golden leaves"
-          className="w-full h-full object-cover"
+          alt="A serene willow tree by water at twilight with fireflies"
+          className="w-full h-full object-cover object-top"
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 40%, hsl(36, 33%, 97%) 100%)",
+              "linear-gradient(to bottom, transparent 50%, hsl(45, 33%, 95%) 100%)",
           }}
         />
       </div>
 
-      <div className="roots-container flex-1 flex flex-col -mt-8 relative z-10">
+      {/* Content */}
+      <div className="roots-container flex-1 flex flex-col -mt-12 relative z-10">
         <div className="text-center space-y-4 animate-fade-up">
+          {/* Logo */}
+          <img
+            src={logo}
+            alt="Roots & Reflections logo"
+            className="w-24 h-24 mx-auto rounded-2xl shadow-md object-cover"
+          />
           <h1 className="roots-heading-1">
             Roots &<br />
             Reflections

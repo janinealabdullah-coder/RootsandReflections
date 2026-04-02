@@ -6,80 +6,80 @@
 
 @layer base {
   :root {
-    --background: 36 33% 97%;
-    --foreground: 24 30% 15%;
+    --background: 45 33% 95%;
+    --foreground: 150 30% 12%;
 
-    --card: 36 30% 95%;
-    --card-foreground: 24 30% 15%;
+    --card: 45 30% 93%;
+    --card-foreground: 150 30% 12%;
 
-    --popover: 36 33% 97%;
-    --popover-foreground: 24 30% 15%;
+    --popover: 45 33% 95%;
+    --popover-foreground: 150 30% 12%;
 
-    --primary: 24 35% 28%;
-    --primary-foreground: 36 33% 97%;
+    --primary: 150 28% 22%;
+    --primary-foreground: 45 33% 95%;
 
-    --secondary: 140 15% 42%;
-    --secondary-foreground: 36 33% 97%;
+    --secondary: 150 18% 38%;
+    --secondary-foreground: 45 33% 95%;
 
-    --muted: 36 20% 90%;
-    --muted-foreground: 24 15% 45%;
+    --muted: 45 18% 88%;
+    --muted-foreground: 150 10% 42%;
 
-    --accent: 36 70% 55%;
-    --accent-foreground: 24 30% 15%;
+    --accent: 30 55% 55%;
+    --accent-foreground: 150 30% 12%;
 
     --destructive: 0 65% 50%;
-    --destructive-foreground: 36 33% 97%;
+    --destructive-foreground: 45 33% 95%;
 
-    --border: 30 20% 85%;
-    --input: 30 20% 85%;
-    --ring: 24 35% 28%;
+    --border: 150 12% 82%;
+    --input: 150 12% 82%;
+    --ring: 150 28% 22%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 36 30% 95%;
-    --sidebar-foreground: 24 30% 15%;
-    --sidebar-primary: 24 35% 28%;
-    --sidebar-primary-foreground: 36 33% 97%;
-    --sidebar-accent: 36 20% 90%;
-    --sidebar-accent-foreground: 24 30% 15%;
-    --sidebar-border: 30 20% 85%;
-    --sidebar-ring: 24 35% 28%;
+    --sidebar-background: 45 30% 93%;
+    --sidebar-foreground: 150 30% 12%;
+    --sidebar-primary: 150 28% 22%;
+    --sidebar-primary-foreground: 45 33% 95%;
+    --sidebar-accent: 45 18% 88%;
+    --sidebar-accent-foreground: 150 30% 12%;
+    --sidebar-border: 150 12% 82%;
+    --sidebar-ring: 150 28% 22%;
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Source Sans 3', -apple-system, sans-serif;
 
-    --shadow-soft: 0 2px 12px -2px hsl(24 30% 15% / 0.08);
-    --shadow-warm: 0 4px 20px -4px hsl(36 70% 55% / 0.2);
+    --shadow-soft: 0 2px 12px -2px hsl(150 30% 12% / 0.06);
+    --shadow-warm: 0 4px 20px -4px hsl(150 28% 22% / 0.15);
   }
 
   .dark {
-    --background: 24 20% 10%;
-    --foreground: 36 25% 90%;
-    --card: 24 18% 14%;
-    --card-foreground: 36 25% 90%;
-    --popover: 24 18% 14%;
-    --popover-foreground: 36 25% 90%;
-    --primary: 36 60% 65%;
-    --primary-foreground: 24 20% 10%;
-    --secondary: 140 15% 50%;
-    --secondary-foreground: 36 25% 90%;
-    --muted: 24 15% 20%;
-    --muted-foreground: 36 15% 60%;
-    --accent: 36 60% 55%;
-    --accent-foreground: 24 20% 10%;
+    --background: 150 20% 8%;
+    --foreground: 45 25% 90%;
+    --card: 150 18% 12%;
+    --card-foreground: 45 25% 90%;
+    --popover: 150 18% 12%;
+    --popover-foreground: 45 25% 90%;
+    --primary: 45 40% 75%;
+    --primary-foreground: 150 20% 8%;
+    --secondary: 150 15% 45%;
+    --secondary-foreground: 45 25% 90%;
+    --muted: 150 12% 18%;
+    --muted-foreground: 45 12% 55%;
+    --accent: 30 50% 55%;
+    --accent-foreground: 150 20% 8%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 36 25% 90%;
-    --border: 24 12% 22%;
-    --input: 24 12% 22%;
-    --ring: 36 60% 65%;
-    --sidebar-background: 24 18% 14%;
-    --sidebar-foreground: 36 25% 90%;
-    --sidebar-primary: 36 60% 65%;
-    --sidebar-primary-foreground: 24 20% 10%;
-    --sidebar-accent: 24 15% 20%;
-    --sidebar-accent-foreground: 36 25% 90%;
-    --sidebar-border: 24 12% 22%;
-    --sidebar-ring: 36 60% 65%;
+    --destructive-foreground: 45 25% 90%;
+    --border: 150 10% 20%;
+    --input: 150 10% 20%;
+    --ring: 45 40% 75%;
+    --sidebar-background: 150 18% 12%;
+    --sidebar-foreground: 45 25% 90%;
+    --sidebar-primary: 45 40% 75%;
+    --sidebar-primary-foreground: 150 20% 8%;
+    --sidebar-accent: 150 12% 18%;
+    --sidebar-accent-foreground: 45 25% 90%;
+    --sidebar-border: 150 10% 20%;
+    --sidebar-ring: 45 40% 75%;
   }
 }
 
