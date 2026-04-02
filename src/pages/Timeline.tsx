@@ -220,13 +220,14 @@ const Timeline = () => {
                 {/* Stories in this decade */}
                 <div className="ml-[18px] pl-8 border-l-0 space-y-3">
                   {grouped[decade].map((story, si) => (
-                    <div
+                    <button
                       key={story.id}
-                      className="roots-card relative animate-fade-up"
+                      onClick={() => setSelectedStory(story)}
+                      className="roots-card relative animate-fade-up w-full text-left hover:shadow-md hover:border-primary/30 transition-all cursor-pointer group"
                       style={{ animationDelay: `${(di * 0.1) + (si * 0.05)}s`, opacity: 0 }}
                     >
                       {/* Connector dot */}
-                      <div className="absolute -left-[calc(2rem+5px)] top-5 w-2.5 h-2.5 rounded-full bg-muted-foreground/30 border-2 border-background" />
+                      <div className="absolute -left-[calc(2rem+5px)] top-5 w-2.5 h-2.5 rounded-full bg-muted-foreground/30 border-2 border-background group-hover:bg-primary/50 transition-colors" />
 
                       {/* Photo thumbnail */}
                       {story.photo_urls && story.photo_urls.length > 0 && (
@@ -247,18 +248,21 @@ const Timeline = () => {
                             {story.content}
                           </p>
                         </div>
-                        {story.year && (
-                          <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full shrink-0">
-                            {story.year}
-                          </span>
-                        )}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {story.year && (
+                            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                              {story.year}
+                            </span>
+                          )}
+                          <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
+                        </div>
                       </div>
 
                       <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                         <BookOpen className="w-3.5 h-3.5" />
                         <span>{members[story.author_id] || "Unknown"}</span>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
