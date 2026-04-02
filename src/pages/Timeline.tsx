@@ -270,6 +270,81 @@ const Timeline = () => {
           </div>
         )}
       </div>
+
+      {/* Story detail dialog */}
+      <Dialog open={!!selectedStory} onOpenChange={(open) => !open && setSelectedStory(null)}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          {selectedStory && (() => {
+            const privacy = privacyLabels[selectedStory.privacy] || privacyLabels["family-only"];
+            const PrivacyIcon = privacy.icon;
+            const taggedNames = (selectedStory.tagged_members || [])
+              .map((uid) => members[uid])
+              .filter(Boolean);
+
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-display">
+                    {selectedStory.title}
+                  </DialogTitle>
+                </DialogHeader>
+
+                {/* Photos */}
+                {selectedStory.photo_urls && selectedStory.photo_urls.length > 0 && (
+                  <div className="space-y-2 -mx-2">
+                    {selectedStory.photo_urls.map((url, i) => (
+                      <div key={i} className="rounded-lg overflow-hidden">
+                        <img
+                          src={url}
+                          alt={`Photo ${i + 1}`}
+                          className="w-full h-auto max-h-72 object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Full content */}
+                <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                  {selectedStory.content}
+                </p>
+
+                {/* Tagged members */}
+                {taggedNames.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {taggedNames.map((name) => (
+                      <span
+                        key={name}
+                        className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"
+                      >
+                        {name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Metadata */}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground border-t pt-3">
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4" />
+                    {members[selectedStory.author_id] || "Unknown"}
+                  </span>
+                  {(selectedStory.year || selectedStory.decade) && (
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4" />
+                      {selectedStory.year || selectedStory.decade}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1.5">
+                    <PrivacyIcon className="w-4 h-4" />
+                    {privacy.label}
+                  </span>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
