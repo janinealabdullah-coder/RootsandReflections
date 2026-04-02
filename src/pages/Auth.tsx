@@ -20,16 +20,21 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast({
-          title: "Check your email",
-          description: "We sent you a confirmation link to get started.",
-        });
+        if (data.session) {
+          // Auto-confirmed — navigate directly
+          navigate("/create-family");
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We sent you a confirmation link to get started.",
+          });
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
