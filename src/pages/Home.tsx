@@ -109,7 +109,13 @@ const Home = () => {
     <div className="min-h-screen bg-background pb-8">
       <div className="bg-card border-b px-5 py-6">
         <div className="max-w-lg mx-auto flex items-start justify-between">
-          <div>
+          <div className="flex items-center gap-3">
+            <img
+              src={theme === "dark" ? logoDark : logoLight}
+              alt="Roots & Reflections"
+              className="h-10 w-10 rounded-lg object-cover"
+            />
+            <div>
             <p className="text-sm text-muted-foreground">Welcome back to</p>
             <h1 className="text-2xl font-display font-bold text-foreground">
               {family?.name}
