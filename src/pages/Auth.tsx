@@ -15,6 +15,10 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Check for ?next= redirect param
+  const searchParams = new URLSearchParams(window.location.search);
+  const nextUrl = searchParams.get("next") || "/home";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -29,7 +33,7 @@ const Auth = () => {
         if (error) throw error;
         if (data.session) {
           // Auto-confirmed — navigate directly
-          navigate("/create-family");
+          navigate(nextUrl);
         } else {
           toast({
             title: "Check your email",
@@ -42,7 +46,7 @@ const Auth = () => {
           password,
         });
         if (error) throw error;
-        navigate("/");
+        navigate(nextUrl);
       }
     } catch (error: any) {
       toast({
