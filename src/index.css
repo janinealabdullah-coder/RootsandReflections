@@ -6,50 +6,50 @@
 
 @layer base {
   :root {
-    --background: 145 20% 90%;
-    --foreground: 150 30% 12%;
+    --background: 150 25% 78%;
+    --foreground: 150 35% 10%;
 
-    --card: 145 18% 87%;
-    --card-foreground: 150 30% 12%;
+    --card: 150 22% 74%;
+    --card-foreground: 150 35% 10%;
 
-    --popover: 145 20% 90%;
-    --popover-foreground: 150 30% 12%;
+    --popover: 150 25% 78%;
+    --popover-foreground: 150 35% 10%;
 
-    --primary: 150 28% 22%;
-    --primary-foreground: 145 20% 95%;
+    --primary: 150 32% 18%;
+    --primary-foreground: 145 20% 92%;
 
-    --secondary: 150 18% 38%;
-    --secondary-foreground: 145 20% 95%;
+    --secondary: 150 20% 34%;
+    --secondary-foreground: 145 20% 92%;
 
-    --muted: 145 12% 82%;
-    --muted-foreground: 150 10% 38%;
+    --muted: 150 15% 68%;
+    --muted-foreground: 150 15% 30%;
 
     --accent: 30 55% 55%;
-    --accent-foreground: 150 30% 12%;
+    --accent-foreground: 150 35% 10%;
 
     --destructive: 0 65% 50%;
-    --destructive-foreground: 145 20% 95%;
+    --destructive-foreground: 145 20% 92%;
 
-    --border: 150 14% 76%;
-    --input: 150 14% 76%;
-    --ring: 150 28% 22%;
+    --border: 150 18% 64%;
+    --input: 150 18% 64%;
+    --ring: 150 32% 18%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 145 18% 87%;
-    --sidebar-foreground: 150 30% 12%;
-    --sidebar-primary: 150 28% 22%;
-    --sidebar-primary-foreground: 145 20% 95%;
-    --sidebar-accent: 145 12% 82%;
-    --sidebar-accent-foreground: 150 30% 12%;
-    --sidebar-border: 150 14% 76%;
-    --sidebar-ring: 150 28% 22%;
+    --sidebar-background: 150 22% 74%;
+    --sidebar-foreground: 150 35% 10%;
+    --sidebar-primary: 150 32% 18%;
+    --sidebar-primary-foreground: 145 20% 92%;
+    --sidebar-accent: 150 15% 68%;
+    --sidebar-accent-foreground: 150 35% 10%;
+    --sidebar-border: 150 18% 64%;
+    --sidebar-ring: 150 32% 18%;
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Source Sans 3', -apple-system, sans-serif;
 
-    --shadow-soft: 0 2px 12px -2px hsl(150 30% 12% / 0.08);
-    --shadow-warm: 0 4px 20px -4px hsl(150 28% 22% / 0.18);
+    --shadow-soft: 0 2px 12px -2px hsl(150 30% 10% / 0.1);
+    --shadow-warm: 0 4px 20px -4px hsl(150 28% 18% / 0.2);
   }
 
   .dark {
