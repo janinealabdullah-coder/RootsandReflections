@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFamily } from "@/hooks/use-family";
 import PageLayout from "@/components/PageLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ interface Member {
 const Settings = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { family: activeFamily, loading: familyLoading } = useFamily();
 
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [familyName, setFamilyName] = useState("");
@@ -35,31 +37,35 @@ const Settings = () => {
   const isAdmin = user?.id === createdBy;
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || familyLoading) return;
+
+    if (!activeFamily) {
+      navigate("/");
+      return;
+    }
 
     const load = async () => {
-      const { data: membership } = await supabase
-        .from("family_members")
-        .select("family_id, families(id, name, created_by)")
-        .eq("user_id", user.id)
-        .limit(1)
-        .maybeSingle();
+      // Get created_by for admin check
+      const { data: famData } = await supabase
+        .from("families")
+        .select("id, name, created_by")
+        .eq("id", activeFamily.familyId)
+        .single();
 
-      if (!membership) {
+      if (!famData) {
         navigate("/");
         return;
       }
 
-      const fam = membership.families as any;
-      setFamilyId(fam.id);
-      setFamilyName(fam.name);
-      setOriginalName(fam.name);
-      setCreatedBy(fam.created_by);
+      setFamilyId(famData.id);
+      setFamilyName(famData.name);
+      setOriginalName(famData.name);
+      setCreatedBy(famData.created_by);
 
       const { data: mems } = await supabase
         .from("family_members")
         .select("id, user_id, display_name, role, relationship, joined_at")
-        .eq("family_id", fam.id)
+        .eq("family_id", famData.id)
         .order("joined_at", { ascending: true });
 
       setMembers(mems || []);
@@ -67,7 +73,7 @@ const Settings = () => {
     };
 
     load();
-  }, [user, navigate]);
+  }, [user, activeFamily, familyLoading, navigate]);
 
   const handleRename = async () => {
     if (!familyId || !familyName.trim() || familyName === originalName) return;
