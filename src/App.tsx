@@ -17,6 +17,7 @@ import FamilyTree from "./pages/FamilyTree";
 import Profile from "./pages/Profile";
 import Invites from "./pages/Invites";
 import Settings from "./pages/Settings";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
               path="/create-family"
               element={
