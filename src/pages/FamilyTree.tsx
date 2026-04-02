@@ -342,7 +342,8 @@ const FamilyTree = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 
