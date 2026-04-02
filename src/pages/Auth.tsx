@@ -177,6 +177,11 @@ const Auth = () => {
               minLength={6}
               className="h-14 text-lg px-4"
             />
+            {isSignUp && (
+              <p className="text-sm text-muted-foreground">
+                Must be at least 6 characters with a mix of letters, numbers, and symbols.
+              </p>
+            )}
           </div>
 
           <Button size="xl" className="w-full" disabled={loading}>
