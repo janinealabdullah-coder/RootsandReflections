@@ -166,7 +166,7 @@ const StoryForm = ({
       const photoUrls: string[] = [];
       for (const photo of photos) {
         const ext = photo.name.split(".").pop();
-        const path = `${familyId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("story-photos")
           .upload(path, photo);

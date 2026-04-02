@@ -30,13 +30,10 @@ const JoinFamily = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("invite_codes")
-        .select("family_id, families(name)")
-        .eq("code", inviteCode.trim().toUpperCase())
-        .maybeSingle();
+        .rpc("lookup_invite_code", { _code: inviteCode.trim().toUpperCase() });
 
       if (error) throw error;
-      if (!data) {
+      if (!data || data.length === 0) {
         toast({
           title: "Invalid code",
           description: "We couldn't find a family with that invite code.",
@@ -45,8 +42,8 @@ const JoinFamily = () => {
         return;
       }
 
-      setFamilyId(data.family_id);
-      setFamilyName((data.families as any)?.name || "Your Family");
+      setFamilyId(data[0].family_id);
+      setFamilyName(data[0].family_name || "Your Family");
       setStep("profile");
     } catch (error: any) {
       toast({

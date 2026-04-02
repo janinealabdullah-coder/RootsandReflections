@@ -347,6 +347,13 @@ export type Database = {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
       }
+      lookup_invite_code: {
+        Args: { _code: string }
+        Returns: {
+          family_id: string
+          family_name: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
