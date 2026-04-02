@@ -82,6 +82,52 @@ export type Database = {
           },
         ]
       }
+      family_relationships: {
+        Row: {
+          child_member_id: string
+          created_at: string
+          family_id: string
+          id: string
+          parent_member_id: string
+        }
+        Insert: {
+          child_member_id: string
+          created_at?: string
+          family_id: string
+          id?: string
+          parent_member_id: string
+        }
+        Update: {
+          child_member_id?: string
+          created_at?: string
+          family_id?: string
+          id?: string
+          parent_member_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_relationships_child_member_id_fkey"
+            columns: ["child_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_relationships_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_relationships_parent_member_id_fkey"
+            columns: ["parent_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invite_codes: {
         Row: {
           code: string
