@@ -112,6 +112,14 @@ const Home = () => {
             <Button
               variant="ghost"
               size="icon"
+              onClick={() => navigate("/profile")}
+              aria-label="Edit profile"
+            >
+              <UserCircle className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={async () => {
                 await signOut();
                 navigate("/");
