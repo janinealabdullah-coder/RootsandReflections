@@ -80,7 +80,8 @@ const Stories = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <PageLayout>
+      <div className="pb-8">
       <PageHeader title="Family Stories" />
 
       <div className="roots-container mt-6 space-y-4">

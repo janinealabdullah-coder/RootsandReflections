@@ -56,7 +56,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-5">
+    <PageLayout>
+      <div className="min-h-screen flex items-center justify-center px-5">
       <div className="w-full max-w-sm space-y-8 animate-fade-up">
         <div className="text-center">
           <h1 className="roots-heading-2">

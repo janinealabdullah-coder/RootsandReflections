@@ -128,7 +128,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <PageLayout>
+      <div className="pb-12">
       <PageHeader title="Edit Profile" />
 
       <div className="max-w-lg mx-auto px-5 mt-8 space-y-8">

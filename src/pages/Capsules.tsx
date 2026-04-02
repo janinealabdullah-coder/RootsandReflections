@@ -76,7 +76,8 @@ const Capsules = () => {
   const isUnlockable = (dateStr: string) => isPast(parseISO(dateStr));
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <PageLayout>
+      <div className="pb-8">
       <PageHeader title="Memory Capsules" />
 
       <div className="roots-container mt-6 space-y-4">

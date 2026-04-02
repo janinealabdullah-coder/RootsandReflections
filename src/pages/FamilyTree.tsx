@@ -189,7 +189,8 @@ const FamilyTree = () => {
   const hasConnections = relationships.length > 0;
 
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <PageLayout>
+      <div className="pb-12">
       <PageHeader
         title="Family Tree"
         actions={
