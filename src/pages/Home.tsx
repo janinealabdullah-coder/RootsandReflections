@@ -35,6 +35,13 @@ const features = [
     path: "/capsule",
     color: "bg-destructive/10 text-destructive",
   },
+  {
+    icon: Link2,
+    label: "Invite Links",
+    description: "Manage family invite codes",
+    path: "/invites",
+    color: "bg-muted text-muted-foreground",
+  },
 ];
 
 const Home = () => {
