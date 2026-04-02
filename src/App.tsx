@@ -10,6 +10,7 @@ import CreateFamily from "./pages/CreateFamily";
 import JoinFamily from "./pages/JoinFamily";
 import Home from "./pages/Home";
 import Stories from "./pages/Stories";
+import Capsules from "./pages/Capsules";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
