@@ -86,7 +86,7 @@ const Auth = () => {
     return (
       <PageLayout overlayOpacity="light">
         <div className="min-h-screen flex items-center justify-center px-5">
-          <div className="w-full max-w-sm space-y-8 animate-fade-up">
+          <div className="w-full max-w-sm space-y-8 animate-fade-up bg-background/60 dark:bg-background/40 backdrop-blur-md rounded-2xl p-8">
             <div className="text-center">
               <h1 className="roots-heading-2">Reset Password</h1>
               <p className="roots-body-large mt-2">
