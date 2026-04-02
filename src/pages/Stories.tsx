@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import StoryCard from "@/components/StoryCard";
 import StoryForm from "@/components/StoryForm";
 
