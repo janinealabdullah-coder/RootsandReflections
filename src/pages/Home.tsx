@@ -100,9 +100,11 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">Loading your family...</p>
-      </div>
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground text-lg">Loading your family...</p>
+        </div>
+      </PageLayout>
     );
   }
 
