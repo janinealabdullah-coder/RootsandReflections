@@ -70,8 +70,9 @@ const Home = () => {
   useEffect(() => {
     if (!family) {
       if (!familyLoading) {
-        navigate("/");
+        navigate("/create-family");
       }
+      setCountsLoading(false);
       return;
     }
 
