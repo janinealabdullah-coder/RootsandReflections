@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, Plus, Link2, Trash2, User, TreeDeciduous } from "lucide-react";
+import { Plus, Link2, Trash2, User, TreeDeciduous } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
