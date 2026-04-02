@@ -47,6 +47,13 @@ const features = [
     path: "/invites",
     color: "bg-muted text-muted-foreground",
   },
+  {
+    icon: Settings,
+    label: "Settings",
+    description: "Rename family & manage members",
+    path: "/settings",
+    color: "bg-muted text-muted-foreground",
+  },
 ];
 
 const Home = () => {
