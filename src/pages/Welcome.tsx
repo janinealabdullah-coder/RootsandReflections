@@ -1,0 +1,99 @@
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import heroTree from "@/assets/hero-tree.jpg";
+
+const Welcome = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Hero Image */}
+      <div className="relative w-full h-64 md:h-80 overflow-hidden">
+        <img
+          src={heroTree}
+          alt="A warm illustration of a family tree with golden leaves"
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent 40%, hsl(36, 33%, 97%) 100%)",
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="roots-container flex-1 flex flex-col -mt-8 relative z-10">
+        <div className="text-center space-y-4 animate-fade-up">
+          <h1 className="roots-heading-1">
+            Roots &<br />
+            Reflections
+          </h1>
+          <p className="roots-body-large max-w-sm mx-auto">
+            Preserve your family's stories, memories, and connections — together.
+          </p>
+        </div>
+
+        <div
+          className="mt-10 space-y-4 animate-fade-up"
+          style={{ animationDelay: "0.2s", opacity: 0 }}
+        >
+          <Button
+            size="xl"
+            className="w-full"
+            onClick={() => navigate("/create-family")}
+          >
+            Start Your Family
+          </Button>
+
+          <Button
+            variant="outline"
+            size="xl"
+            className="w-full"
+            onClick={() => navigate("/join-family")}
+          >
+            Join a Family
+          </Button>
+        </div>
+
+        <div
+          className="mt-8 text-center animate-fade-up"
+          style={{ animationDelay: "0.4s", opacity: 0 }}
+        >
+          <p className="text-muted-foreground text-base">
+            Your stories stay private — only your family can see them.
+          </p>
+        </div>
+
+        {/* Feature hints */}
+        <div
+          className="mt-auto pb-8 pt-10 animate-fade-up"
+          style={{ animationDelay: "0.6s", opacity: 0 }}
+        >
+          <div className="grid grid-cols-3 gap-3 text-center">
+            {[
+              { icon: "📖", label: "Stories" },
+              { icon: "🌳", label: "Family Tree" },
+              { icon: "💌", label: "Time Capsules" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="roots-card flex flex-col items-center gap-2 py-4"
+              >
+                <span className="text-3xl" role="img" aria-label={item.label}>
+                  {item.icon}
+                </span>
+                <span className="text-sm font-semibold text-foreground">
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Welcome;
