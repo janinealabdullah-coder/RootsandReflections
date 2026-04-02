@@ -35,7 +35,7 @@ const Welcome = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Hero Image — willow tree */}
-      <div className="relative w-full h-[36rem] md:h-[40rem] overflow-hidden">
+      <div className="relative w-full h-[40rem] md:h-[44rem] overflow-hidden">
         <img
           src={heroTree}
           alt="A serene willow tree by water at twilight with fireflies"
@@ -45,7 +45,7 @@ const Welcome = () => {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 70%, hsl(150, 25%, 78%) 100%)",
+              "linear-gradient(to bottom, transparent 80%, hsl(var(--background)) 100%)",
           }}
         />
       </div>
