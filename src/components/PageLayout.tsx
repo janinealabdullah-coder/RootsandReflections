@@ -11,7 +11,7 @@ interface PageLayoutProps {
 const PageLayout = ({ children, withBackground = true, className = "", overlayOpacity = "normal" }: PageLayoutProps) => {
   const overlayClass = overlayOpacity === "light"
     ? "fixed inset-0 bg-background/15 dark:bg-background/25"
-    : "fixed inset-0 bg-background/45 dark:bg-background/55";
+    : "fixed inset-0 bg-background/55 dark:bg-background/65";
 
   return (
     <div className={`min-h-screen relative ${className}`}>
