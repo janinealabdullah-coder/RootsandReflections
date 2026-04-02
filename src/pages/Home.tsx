@@ -3,7 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2 } from "lucide-react";
+import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2, Settings } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import logoLight from "@/assets/logo-light.jpeg";
@@ -45,6 +45,13 @@ const features = [
     label: "Invite Links",
     description: "Manage family invite codes",
     path: "/invites",
+    color: "bg-muted text-muted-foreground",
+  },
+  {
+    icon: Settings,
+    label: "Settings",
+    description: "Rename family & manage members",
+    path: "/settings",
     color: "bg-muted text-muted-foreground",
   },
 ];
