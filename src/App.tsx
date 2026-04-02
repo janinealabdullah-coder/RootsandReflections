@@ -93,6 +93,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/tree"
+              element={
+                <ProtectedRoute>
+                  <FamilyTree />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
