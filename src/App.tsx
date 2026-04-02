@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import CreateFamily from "./pages/CreateFamily";
 import JoinFamily from "./pages/JoinFamily";
 import Home from "./pages/Home";
+import Stories from "./pages/Stories";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/stories"
+              element={
+                <ProtectedRoute>
+                  <Stories />
                 </ProtectedRoute>
               }
             />
