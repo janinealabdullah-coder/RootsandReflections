@@ -20,6 +20,8 @@ interface Story {
   year: number | null;
   decade: string | null;
   photo_urls: string[] | null;
+  tagged_members: string[] | null;
+  privacy: string;
   author_id: string;
   created_at: string;
 }
@@ -29,6 +31,12 @@ const DECADE_ORDER = [
   "1970s", "1960s", "1950s", "1940s", "1930s",
   "1920s", "Earlier",
 ];
+
+const privacyLabels: Record<string, { icon: typeof Users; label: string }> = {
+  "family-only": { icon: Users, label: "Family only" },
+  private: { icon: Lock, label: "Private" },
+  shareable: { icon: Globe, label: "Shareable" },
+};
 
 const Timeline = () => {
   const navigate = useNavigate();
