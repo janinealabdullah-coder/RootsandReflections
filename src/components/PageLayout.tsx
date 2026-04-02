@@ -16,7 +16,7 @@ const PageLayout = ({ children, withBackground = true, className = "" }: PageLay
             className="fixed inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${bgTree})` }}
           />
-          <div className="fixed inset-0 bg-background/65 dark:bg-background/75" />
+          <div className="fixed inset-0 bg-background/45 dark:bg-background/55" />
         </>
       )}
       <div className="relative z-10">{children}</div>
