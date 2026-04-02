@@ -48,7 +48,6 @@ const Welcome = () => {
               "linear-gradient(to bottom, transparent 50%, hsl(145, 20%, 90%) 100%)",
           }}
         />
-        />
       </div>
 
       {/* Content */}
