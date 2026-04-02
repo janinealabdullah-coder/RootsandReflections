@@ -22,32 +22,6 @@ const Auth = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const nextUrl = searchParams.get("next") || "/home";
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
-      if (result.error) {
-        toast({
-          title: "Google sign-in failed",
-          description: result.error.message,
-          variant: "destructive",
-        });
-        return;
-      }
-      if (result.redirected) return;
-      navigate(nextUrl);
-    } catch (error: any) {
-      toast({
-        title: "Something went wrong",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
 
   const handleAppleSignIn = async () => {
     setAppleLoading(true);
