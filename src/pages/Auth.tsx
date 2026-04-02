@@ -15,6 +15,10 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Check for ?next= redirect param
+  const searchParams = new URLSearchParams(window.location.search);
+  const nextUrl = searchParams.get("next") || "/home";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
