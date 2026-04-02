@@ -6,50 +6,50 @@
 
 @layer base {
   :root {
-    --background: 45 33% 95%;
+    --background: 145 20% 90%;
     --foreground: 150 30% 12%;
 
-    --card: 45 30% 93%;
+    --card: 145 18% 87%;
     --card-foreground: 150 30% 12%;
 
-    --popover: 45 33% 95%;
+    --popover: 145 20% 90%;
     --popover-foreground: 150 30% 12%;
 
     --primary: 150 28% 22%;
-    --primary-foreground: 45 33% 95%;
+    --primary-foreground: 145 20% 95%;
 
     --secondary: 150 18% 38%;
-    --secondary-foreground: 45 33% 95%;
+    --secondary-foreground: 145 20% 95%;
 
-    --muted: 45 18% 88%;
-    --muted-foreground: 150 10% 42%;
+    --muted: 145 12% 82%;
+    --muted-foreground: 150 10% 38%;
 
     --accent: 30 55% 55%;
     --accent-foreground: 150 30% 12%;
 
     --destructive: 0 65% 50%;
-    --destructive-foreground: 45 33% 95%;
+    --destructive-foreground: 145 20% 95%;
 
-    --border: 150 12% 82%;
-    --input: 150 12% 82%;
+    --border: 150 14% 76%;
+    --input: 150 14% 76%;
     --ring: 150 28% 22%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 45 30% 93%;
+    --sidebar-background: 145 18% 87%;
     --sidebar-foreground: 150 30% 12%;
     --sidebar-primary: 150 28% 22%;
-    --sidebar-primary-foreground: 45 33% 95%;
-    --sidebar-accent: 45 18% 88%;
+    --sidebar-primary-foreground: 145 20% 95%;
+    --sidebar-accent: 145 12% 82%;
     --sidebar-accent-foreground: 150 30% 12%;
-    --sidebar-border: 150 12% 82%;
+    --sidebar-border: 150 14% 76%;
     --sidebar-ring: 150 28% 22%;
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Source Sans 3', -apple-system, sans-serif;
 
-    --shadow-soft: 0 2px 12px -2px hsl(150 30% 12% / 0.06);
-    --shadow-warm: 0 4px 20px -4px hsl(150 28% 22% / 0.15);
+    --shadow-soft: 0 2px 12px -2px hsl(150 30% 12% / 0.08);
+    --shadow-warm: 0 4px 20px -4px hsl(150 28% 22% / 0.18);
   }
 
   .dark {
