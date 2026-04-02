@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveStoryPhotos } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
 import { useStoryLikes } from "@/hooks/use-story-likes";

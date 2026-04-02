@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveStoryPhotos } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
 import { BookOpen, Calendar, ChevronRight, Lock, Globe, Users, Search, X } from "lucide-react";
