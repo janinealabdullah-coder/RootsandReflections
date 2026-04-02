@@ -47,7 +47,8 @@ const Stories = () => {
     if (error) {
       toast({ title: "Error loading stories", description: error.message, variant: "destructive" });
     } else {
-      setStories(data || []);
+      const resolved = await resolveStoryPhotos(data || []);
+      setStories(resolved);
     }
     setLoading(false);
   };

@@ -62,7 +62,8 @@ const Timeline = () => {
         .eq("family_id", family.familyId)
         .order("year", { ascending: false, nullsFirst: false });
 
-      setStories(data || []);
+      const resolved = await resolveStoryPhotos(data || []);
+      setStories(resolved);
 
       const lookup: Record<string, string> = {};
       family.members.forEach((m) => {
