@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, BookOpen, Calendar, ChevronRight, Lock, Globe, Users, Search, X } from "lucide-react";
+import { BookOpen, Calendar, ChevronRight, Lock, Globe, Users, Search, X } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
