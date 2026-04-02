@@ -111,6 +111,7 @@ const Home = () => {
   return (
     <PageLayout>
       <div className="pb-8">
+      <div className="bg-card border-b px-5 py-6">
         <div className="max-w-lg mx-auto flex items-start justify-between">
           <div className="flex items-center gap-3">
             <img
