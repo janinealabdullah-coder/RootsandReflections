@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Users, Copy, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const CreateFamily = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [step, setStep] = useState<"info" | "profile" | "invite">("info");
   const [familyName, setFamilyName] = useState("");
   const [userName, setUserName] = useState("");
   const [birthYear, setBirthYear] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const inviteCode = "ROOTS-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-  const inviteLink = `${window.location.origin}/join-family?code=${inviteCode}`;
+  const inviteLink = inviteCode
+    ? `${window.location.origin}/join-family?code=${inviteCode}`
+    : "";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(inviteLink);
@@ -22,15 +30,67 @@ const CreateFamily = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCreateFamily = async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      // Create family
+      const { data: family, error: familyError } = await supabase
+        .from("families")
+        .insert({ name: familyName, created_by: user.id })
+        .select()
+        .single();
+
+      if (familyError) throw familyError;
+
+      // Add creator as member
+      const { error: memberError } = await supabase
+        .from("family_members")
+        .insert({
+          family_id: family.id,
+          user_id: user.id,
+          display_name: userName,
+          birth_year: birthYear ? parseInt(birthYear) : null,
+          role: "admin",
+        });
+
+      if (memberError) throw memberError;
+
+      // Generate invite code
+      const code =
+        "ROOTS-" +
+        Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      const { error: inviteError } = await supabase
+        .from("invite_codes")
+        .insert({
+          family_id: family.id,
+          code,
+          created_by: user.id,
+        });
+
+      if (inviteError) throw inviteError;
+
+      setInviteCode(code);
+      setStep("invite");
+    } catch (error: any) {
+      toast({
+        title: "Error creating family",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="roots-container py-6">
-        {/* Header */}
         <button
           onClick={() => {
             if (step === "info") navigate("/");
             else if (step === "profile") setStep("info");
-            else if (step === "invite") setStep("profile");
           }}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           aria-label="Go back"
@@ -61,7 +121,6 @@ const CreateFamily = () => {
                 This is how your family group will appear to members.
               </p>
             </div>
-
             <div className="space-y-3">
               <Label htmlFor="familyName" className="text-base font-semibold">
                 Family Name
@@ -74,7 +133,6 @@ const CreateFamily = () => {
                 className="h-14 text-lg px-4"
               />
             </div>
-
             <Button
               size="xl"
               className="w-full"
@@ -94,7 +152,6 @@ const CreateFamily = () => {
                 Tell your family a bit about yourself.
               </p>
             </div>
-
             <div className="space-y-5">
               <div className="space-y-3">
                 <Label htmlFor="userName" className="text-base font-semibold">
@@ -108,7 +165,6 @@ const CreateFamily = () => {
                   className="h-14 text-lg px-4"
                 />
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="birthYear" className="text-base font-semibold">
                   Birth Year
@@ -123,14 +179,13 @@ const CreateFamily = () => {
                 />
               </div>
             </div>
-
             <Button
               size="xl"
               className="w-full"
-              disabled={!userName.trim()}
-              onClick={() => setStep("invite")}
+              disabled={!userName.trim() || loading}
+              onClick={handleCreateFamily}
             >
-              Continue
+              {loading ? "Creating..." : "Create Family"}
             </Button>
           </div>
         )}
@@ -148,7 +203,6 @@ const CreateFamily = () => {
               </p>
             </div>
 
-            {/* Invite link card */}
             <div className="roots-card space-y-4">
               <Label className="text-base font-semibold">Invite Link</Label>
               <div className="flex items-center gap-2">
@@ -164,7 +218,11 @@ const CreateFamily = () => {
                   onClick={handleCopy}
                   aria-label="Copy invite link"
                 >
-                  {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                  {copied ? (
+                    <Check className="w-5 h-5" />
+                  ) : (
+                    <Copy className="w-5 h-5" />
+                  )}
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">

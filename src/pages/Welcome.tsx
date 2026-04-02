@@ -1,13 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import heroTree from "@/assets/hero-tree.jpg";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // If already logged in, go to family selection / creation
+  const handleStart = () => {
+    if (user) {
+      navigate("/create-family");
+    } else {
+      navigate("/auth?next=/create-family");
+    }
+  };
+
+  const handleJoin = () => {
+    if (user) {
+      navigate("/join-family");
+    } else {
+      navigate("/auth?next=/join-family");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Hero Image */}
       <div className="relative w-full h-64 md:h-80 overflow-hidden">
         <img
           src={heroTree}
@@ -23,7 +41,6 @@ const Welcome = () => {
         />
       </div>
 
-      {/* Content */}
       <div className="roots-container flex-1 flex flex-col -mt-8 relative z-10">
         <div className="text-center space-y-4 animate-fade-up">
           <h1 className="roots-heading-1">
@@ -39,20 +56,10 @@ const Welcome = () => {
           className="mt-10 space-y-4 animate-fade-up"
           style={{ animationDelay: "0.2s", opacity: 0 }}
         >
-          <Button
-            size="xl"
-            className="w-full"
-            onClick={() => navigate("/create-family")}
-          >
+          <Button size="xl" className="w-full" onClick={handleStart}>
             Start Your Family
           </Button>
-
-          <Button
-            variant="outline"
-            size="xl"
-            className="w-full"
-            onClick={() => navigate("/join-family")}
-          >
+          <Button variant="outline" size="xl" className="w-full" onClick={handleJoin}>
             Join a Family
           </Button>
         </div>
@@ -66,7 +73,6 @@ const Welcome = () => {
           </p>
         </div>
 
-        {/* Feature hints */}
         <div
           className="mt-auto pb-8 pt-10 animate-fade-up"
           style={{ animationDelay: "0.6s", opacity: 0 }}

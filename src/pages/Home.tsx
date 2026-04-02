@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, TreeDeciduous, Clock, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { BookOpen, TreeDeciduous, Clock, Mail, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const features = [
   {
@@ -34,17 +38,85 @@ const features = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+  const [family, setFamily] = useState<{ id: string; name: string } | null>(null);
+  const [memberCount, setMemberCount] = useState(0);
+  const [storyCount, setStoryCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadFamily = async () => {
+      // Get user's family membership
+      const { data: membership } = await supabase
+        .from("family_members")
+        .select("family_id, families(id, name)")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (!membership) {
+        navigate("/");
+        return;
+      }
+
+      const fam = membership.families as any;
+      setFamily({ id: fam.id, name: fam.name });
+
+      // Get counts
+      const [{ count: members }, { count: stories }] = await Promise.all([
+        supabase
+          .from("family_members")
+          .select("*", { count: "exact", head: true })
+          .eq("family_id", fam.id),
+        supabase
+          .from("stories")
+          .select("*", { count: "exact", head: true })
+          .eq("family_id", fam.id),
+      ]);
+
+      setMemberCount(members || 0);
+      setStoryCount(stories || 0);
+      setLoading(false);
+    };
+
+    loadFamily();
+  }, [user, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground text-lg">Loading your family...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-8">
-      {/* Header */}
       <div className="bg-card border-b px-5 py-6">
-        <div className="max-w-lg mx-auto">
-          <p className="text-sm text-muted-foreground">Welcome back to</p>
-          <h1 className="text-2xl font-display font-bold text-foreground">
-            The Johnsons
-          </h1>
-          <p className="text-muted-foreground mt-1">3 members · 0 stories</p>
+        <div className="max-w-lg mx-auto flex items-start justify-between">
+          <div>
+            <p className="text-sm text-muted-foreground">Welcome back to</p>
+            <h1 className="text-2xl font-display font-bold text-foreground">
+              {family?.name}
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              {memberCount} member{memberCount !== 1 ? "s" : ""} · {storyCount}{" "}
+              stor{storyCount !== 1 ? "ies" : "y"}
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={async () => {
+              await signOut();
+              navigate("/");
+            }}
+            aria-label="Sign out"
+          >
+            <LogOut className="w-5 h-5" />
+          </Button>
         </div>
       </div>
 
