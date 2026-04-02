@@ -70,11 +70,9 @@ const Welcome = () => {
           <Button variant="outline" size="xl" className="w-full" onClick={handleJoin}>
             Join a Family
           </Button>
-          {!user && (
-            <Button variant="ghost" size="default" className="w-full" onClick={() => navigate("/auth")}>
-              Already have an account? Log in
-            </Button>
-          )}
+          <Button variant="ghost" size="default" className="w-full" onClick={() => navigate(user ? "/home" : "/auth")}>
+            {user ? "Go to Dashboard" : "Already have an account? Log in"}
+          </Button>
         </div>
 
         <div
