@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, BookOpen, Calendar, Search, X } from "lucide-react";
+import { ArrowLeft, BookOpen, Calendar, ChevronRight, Lock, Globe, Users, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Story {
   id: string;
