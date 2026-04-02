@@ -155,7 +155,8 @@ const Capsules = () => {
           );
         })}
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

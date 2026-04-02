@@ -114,7 +114,8 @@ const Stories = () => {
           ))
         )}
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

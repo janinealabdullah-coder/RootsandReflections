@@ -287,7 +287,8 @@ const Invites = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

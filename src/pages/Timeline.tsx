@@ -339,7 +339,8 @@ const Timeline = () => {
           })()}
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 

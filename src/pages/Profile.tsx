@@ -217,7 +217,8 @@ const Profile = () => {
           {saving ? "Saving…" : "Save Changes"}
         </Button>
       </div>
-    </div>
+      </div>
+    </PageLayout>
   );
 };
 
