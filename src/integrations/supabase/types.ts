@@ -14,13 +14,218 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      families: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      family_members: {
+        Row: {
+          avatar_url: string | null
+          birth_year: number | null
+          display_name: string
+          family_id: string
+          id: string
+          joined_at: string
+          relationship: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          birth_year?: number | null
+          display_name: string
+          family_id: string
+          id?: string
+          joined_at?: string
+          relationship?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          birth_year?: number | null
+          display_name?: string
+          family_id?: string
+          id?: string
+          joined_at?: string
+          relationship?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_members_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invite_codes: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          family_id: string
+          id: string
+          max_uses: number | null
+          use_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          family_id: string
+          id?: string
+          max_uses?: number | null
+          use_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          family_id?: string
+          id?: string
+          max_uses?: number | null
+          use_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invite_codes_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memory_capsules: {
+        Row: {
+          author_id: string
+          created_at: string
+          family_id: string
+          id: string
+          is_unlocked: boolean
+          message: string
+          recipient_ids: string[]
+          unlock_date: string
+        }
+        Insert: {
+          author_id: string
+          created_at?: string
+          family_id: string
+          id?: string
+          is_unlocked?: boolean
+          message: string
+          recipient_ids?: string[]
+          unlock_date: string
+        }
+        Update: {
+          author_id?: string
+          created_at?: string
+          family_id?: string
+          id?: string
+          is_unlocked?: boolean
+          message?: string
+          recipient_ids?: string[]
+          unlock_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memory_capsules_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stories: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          decade: string | null
+          family_id: string
+          id: string
+          photo_urls: string[] | null
+          privacy: string
+          tagged_members: string[] | null
+          title: string
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          decade?: string | null
+          family_id: string
+          id?: string
+          photo_urls?: string[] | null
+          privacy?: string
+          tagged_members?: string[] | null
+          title: string
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          decade?: string | null
+          family_id?: string
+          id?: string
+          photo_urls?: string[] | null
+          privacy?: string
+          tagged_members?: string[] | null
+          title?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stories_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_family_member: {
+        Args: { _family_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
