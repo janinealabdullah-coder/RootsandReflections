@@ -33,7 +33,7 @@ const Auth = () => {
         if (error) throw error;
         if (data.session) {
           // Auto-confirmed — navigate directly
-          navigate("/create-family");
+          navigate(nextUrl);
         } else {
           toast({
             title: "Check your email",
