@@ -74,14 +74,7 @@ const Capsules = () => {
 
   return (
     <div className="min-h-screen bg-background pb-8">
-      <div className="bg-card border-b px-5 py-5">
-        <div className="max-w-lg mx-auto flex items-center gap-3">
-          <button onClick={() => navigate("/home")} className="text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="text-xl font-display font-bold text-foreground">Memory Capsules</h1>
-        </div>
-      </div>
+      <PageHeader title="Memory Capsules" />
 
       <div className="roots-container mt-6 space-y-4">
         <Button onClick={() => setShowForm(true)} size="lg" className="w-full">

@@ -187,26 +187,15 @@ const FamilyTree = () => {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      {/* Header */}
-      <div className="bg-card border-b px-5 py-4">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/home")}>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-xl font-display font-bold text-foreground">Family Tree</h1>
-              <p className="text-sm text-muted-foreground">
-                {members.length} member{members.length !== 1 ? "s" : ""}
-              </p>
-            </div>
-          </div>
+      <PageHeader
+        title="Family Tree"
+        actions={
           <Button size="sm" onClick={() => setShowAddDialog(true)}>
             <Link2 className="w-4 h-4 mr-1.5" />
             Connect
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       <div className="max-w-2xl mx-auto px-5 mt-8">
         {members.length === 0 ? (
