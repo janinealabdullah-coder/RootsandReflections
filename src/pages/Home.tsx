@@ -124,6 +124,7 @@ const Home = () => {
               {memberCount} member{memberCount !== 1 ? "s" : ""} · {storyCount}{" "}
               stor{storyCount !== 1 ? "ies" : "y"}
             </p>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
