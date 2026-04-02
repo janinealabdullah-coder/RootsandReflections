@@ -31,6 +31,8 @@ const Timeline = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState<Record<string, string>>({});
+  const [search, setSearch] = useState("");
+  const [authorFilter, setAuthorFilter] = useState<string | null>(null);
 
   useEffect(() => {
     if (!family) return;
@@ -44,7 +46,6 @@ const Timeline = () => {
 
       setStories(data || []);
 
-      // Build author lookup
       const lookup: Record<string, string> = {};
       family.members.forEach((m) => {
         lookup[m.user_id] = m.display_name;
@@ -56,9 +57,26 @@ const Timeline = () => {
     load();
   }, [family]);
 
-  // Group stories by decade
+  // Filter stories
+  const filtered = useMemo(() => {
+    let result = stories;
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (s) =>
+          s.title.toLowerCase().includes(q) ||
+          s.content.toLowerCase().includes(q)
+      );
+    }
+    if (authorFilter) {
+      result = result.filter((s) => s.author_id === authorFilter);
+    }
+    return result;
+  }, [stories, search, authorFilter]);
+
+  // Group filtered stories by decade
   const grouped: Record<string, Story[]> = {};
-  stories.forEach((story) => {
+  filtered.forEach((story) => {
     const dec = story.decade || (story.year ? `${Math.floor(story.year / 10) * 10}s` : "Undated");
     if (!grouped[dec]) grouped[dec] = [];
     grouped[dec].push(story);
