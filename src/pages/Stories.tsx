@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import StoryCard from "@/components/StoryCard";
 import StoryForm from "@/components/StoryForm";
 
@@ -77,23 +78,7 @@ const Stories = () => {
 
   return (
     <div className="min-h-screen bg-background pb-8">
-      {/* Header */}
-      <div className="bg-card border-b px-5 py-5">
-        <div className="max-w-lg mx-auto flex items-center justify-between">
-          <button
-            onClick={() => navigate("/home")}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Back to home"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="text-base">Home</span>
-          </button>
-          <h1 className="text-xl font-display font-bold text-foreground">
-            Family Stories
-          </h1>
-          <div className="w-16" />
-        </div>
-      </div>
+      <PageHeader title="Family Stories" />
 
       <div className="roots-container mt-6 space-y-4">
         <Button

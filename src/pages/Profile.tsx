@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowLeft, Camera, Loader2, User } from "lucide-react";
+import { Camera, Loader2, User } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,15 +126,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      {/* Header */}
-      <div className="bg-card border-b px-5 py-4">
-        <div className="max-w-lg mx-auto flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/home")}>
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-xl font-display font-bold text-foreground">Edit Profile</h1>
-        </div>
-      </div>
+      <PageHeader title="Edit Profile" />
 
       <div className="max-w-lg mx-auto px-5 mt-8 space-y-8">
         {/* Avatar */}

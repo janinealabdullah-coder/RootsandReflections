@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { ArrowLeft, Copy, Plus, Trash2, Loader2, Link2, Users } from "lucide-react";
+import { Copy, Plus, Trash2, Loader2, Link2, Users } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -146,21 +147,15 @@ const Invites = () => {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      {/* Header */}
-      <div className="bg-card border-b px-5 py-4">
-        <div className="max-w-lg mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/home")}>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <h1 className="text-xl font-display font-bold text-foreground">Invite Links</h1>
-          </div>
+      <PageHeader
+        title="Invite Links"
+        actions={
           <Button size="sm" onClick={() => setShowCreate(true)}>
             <Plus className="w-4 h-4 mr-1" />
             New Invite
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       <div className="max-w-lg mx-auto px-5 mt-6 space-y-4">
         {invites.length === 0 ? (
