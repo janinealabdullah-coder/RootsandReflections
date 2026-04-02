@@ -27,7 +27,7 @@ const Welcome = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Hero Image — willow tree */}
-      <div className="relative w-full h-[28rem] md:h-[32rem] overflow-hidden">
+      <div className="relative w-full h-[36rem] md:h-[40rem] overflow-hidden">
         <img
           src={heroTree}
           alt="A serene willow tree by water at twilight with fireflies"
