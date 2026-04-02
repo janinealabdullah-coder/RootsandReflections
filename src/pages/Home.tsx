@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFamily } from "@/hooks/use-family";
 import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2, Settings } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -10,6 +11,7 @@ import logoLight from "@/assets/logo-light.jpeg";
 import logoDark from "@/assets/logo-dark.jpeg";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
+import FamilySwitcher from "@/components/FamilySwitcher";
 
 const features = [
   {
@@ -60,52 +62,40 @@ const Home = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { theme } = useTheme();
-  const [family, setFamily] = useState<{ id: string; name: string } | null>(null);
+  const { family, loading: familyLoading } = useFamily();
   const [memberCount, setMemberCount] = useState(0);
   const [storyCount, setStoryCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [countsLoading, setCountsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
-
-    const loadFamily = async () => {
-      // Get user's family membership
-      const { data: membership } = await supabase
-        .from("family_members")
-        .select("family_id, families(id, name)")
-        .eq("user_id", user.id)
-        .limit(1)
-        .maybeSingle();
-
-      if (!membership) {
+    if (!family) {
+      if (!familyLoading) {
         navigate("/");
-        return;
       }
+      return;
+    }
 
-      const fam = membership.families as any;
-      setFamily({ id: fam.id, name: fam.name });
-
-      // Get counts
+    const loadCounts = async () => {
+      setCountsLoading(true);
       const [{ count: members }, { count: stories }] = await Promise.all([
         supabase
           .from("family_members")
           .select("*", { count: "exact", head: true })
-          .eq("family_id", fam.id),
+          .eq("family_id", family.familyId),
         supabase
           .from("stories")
           .select("*", { count: "exact", head: true })
-          .eq("family_id", fam.id),
+          .eq("family_id", family.familyId),
       ]);
-
       setMemberCount(members || 0);
       setStoryCount(stories || 0);
-      setLoading(false);
+      setCountsLoading(false);
     };
 
-    loadFamily();
-  }, [user, navigate]);
+    loadCounts();
+  }, [family, familyLoading, navigate]);
 
-  if (loading) {
+  if (familyLoading || countsLoading) {
     return (
       <PageLayout>
         <div className="flex items-center justify-center min-h-screen">
@@ -127,14 +117,15 @@ const Home = () => {
               className="h-10 w-10 rounded-lg object-cover"
             />
             <div>
-            <p className="text-sm text-muted-foreground">Welcome back to</p>
-            <h1 className="text-2xl font-display font-bold text-foreground">
-              {family?.name}
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              {memberCount} member{memberCount !== 1 ? "s" : ""} · {storyCount}{" "}
-              stor{storyCount !== 1 ? "ies" : "y"}
-            </p>
+              <p className="text-sm text-muted-foreground">Welcome back to</p>
+              <h1 className="text-2xl font-display font-bold text-foreground">
+                {family?.familyName}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                {memberCount} member{memberCount !== 1 ? "s" : ""} · {storyCount}{" "}
+                stor{storyCount !== 1 ? "ies" : "y"}
+              </p>
+              <FamilySwitcher />
             </div>
           </div>
           <div className="flex items-center gap-1">
