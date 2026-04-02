@@ -21,33 +21,6 @@ const Auth = () => {
   const nextUrl = searchParams.get("next") || "/home";
 
 
-  const handleAppleSignIn = async () => {
-    setAppleLoading(true);
-    try {
-      const result = await lovable.auth.signInWithOAuth("apple", {
-        redirect_uri: window.location.origin,
-      });
-      if (result.error) {
-        toast({
-          title: "Apple sign-in failed",
-          description: result.error.message,
-          variant: "destructive",
-        });
-        return;
-      }
-      if (result.redirected) return;
-      navigate(nextUrl);
-    } catch (error: any) {
-      toast({
-        title: "Something went wrong",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setAppleLoading(false);
-    }
-  };
-
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
