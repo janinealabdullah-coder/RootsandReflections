@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { Lock, Globe, Users, Calendar } from "lucide-react";
+import { Lock, Globe, Users, Calendar, Heart } from "lucide-react";
 
 interface Story {
   id: string;
@@ -20,6 +20,11 @@ interface Member {
   display_name: string;
 }
 
+interface LikeData {
+  count: number;
+  likedByMe: boolean;
+}
+
 const privacyIcons = {
   "family-only": { icon: Users, label: "Family only" },
   private: { icon: Lock, label: "Private" },
@@ -31,11 +36,15 @@ const StoryCard = ({
   members,
   isAuthor,
   style,
+  likeData,
+  onToggleLike,
 }: {
   story: Story;
   members: Member[];
   isAuthor: boolean;
   style?: CSSProperties;
+  likeData?: LikeData;
+  onToggleLike?: () => void;
 }) => {
   const privacyInfo =
     privacyIcons[story.privacy as keyof typeof privacyIcons] ||
@@ -94,12 +103,33 @@ const StoryCard = ({
         </div>
       )}
 
-      {/* Meta row */}
+      {/* Like button + Meta row */}
       <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t border-border">
-        <span>
-          By <strong className="text-foreground">{authorName}</strong>
-        </span>
         <div className="flex items-center gap-3">
+          <span>
+            By <strong className="text-foreground">{authorName}</strong>
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Like button */}
+          {onToggleLike && (
+            <button
+              onClick={onToggleLike}
+              className={`flex items-center gap-1 transition-colors ${
+                likeData?.likedByMe
+                  ? "text-red-500"
+                  : "text-muted-foreground hover:text-red-400"
+              }`}
+              aria-label={likeData?.likedByMe ? "Unlike" : "Like"}
+            >
+              <Heart
+                className={`w-4 h-4 ${likeData?.likedByMe ? "fill-current" : ""}`}
+              />
+              {(likeData?.count || 0) > 0 && (
+                <span className="text-xs font-medium">{likeData?.count}</span>
+              )}
+            </button>
+          )}
           {timeLabel && (
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />

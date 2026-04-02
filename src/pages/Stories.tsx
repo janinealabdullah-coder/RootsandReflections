@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
+import { useStoryLikes } from "@/hooks/use-story-likes";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -32,6 +33,7 @@ const Stories = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const { getLikes, toggleLike } = useStoryLikes(family?.familyId);
 
   const loadStories = async () => {
     if (!family) return;
@@ -109,6 +111,8 @@ const Stories = () => {
               story={story}
               members={family!.members}
               isAuthor={story.author_id === user!.id}
+              likeData={getLikes(story.id)}
+              onToggleLike={() => toggleLike(story.id, story.author_id, story.title)}
               style={{ animationDelay: `${i * 0.08}s`, opacity: 0 }}
             />
           ))
