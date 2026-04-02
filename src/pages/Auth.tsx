@@ -11,13 +11,37 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Check for ?next= redirect param
   const searchParams = new URLSearchParams(window.location.search);
   const nextUrl = searchParams.get("next") || "/home";
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast({
+        title: "Check your email",
+        description: "We sent you a password reset link.",
+      });
+      setIsForgotPassword(false);
+    } catch (error: any) {
+      toast({
+        title: "Something went wrong",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +56,6 @@ const Auth = () => {
         });
         if (error) throw error;
         if (data.session) {
-          // Auto-confirmed — navigate directly
           navigate(nextUrl);
         } else {
           toast({
@@ -58,6 +81,54 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  if (isForgotPassword) {
+    return (
+      <PageLayout>
+        <div className="min-h-screen flex items-center justify-center px-5">
+          <div className="w-full max-w-sm space-y-8 animate-fade-up">
+            <div className="text-center">
+              <h1 className="roots-heading-2">Reset Password</h1>
+              <p className="roots-body-large mt-2">
+                Enter your email and we'll send you a reset link.
+              </p>
+            </div>
+
+            <form onSubmit={handleForgotPassword} className="space-y-5">
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-base font-semibold">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-14 text-lg px-4"
+                />
+              </div>
+
+              <Button size="xl" className="w-full" disabled={loading}>
+                {loading ? "Please wait..." : "Send Reset Link"}
+              </Button>
+            </form>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setIsForgotPassword(false)}
+                className="text-base text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+              >
+                Back to sign in
+              </button>
+            </div>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
@@ -114,6 +185,18 @@ const Auth = () => {
               : "Sign In"}
           </Button>
         </form>
+
+        {!isSignUp && (
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setIsForgotPassword(true)}
+              className="text-base text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Forgot your password?
+            </button>
+          </div>
+        )}
 
         <div className="text-center">
           <button
