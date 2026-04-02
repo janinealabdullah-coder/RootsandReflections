@@ -75,6 +75,8 @@ const NotificationBell = () => {
     markAsRead(notif.id);
     if (notif.type === "capsule_unlocked" && notif.related_id) {
       navigate("/capsule");
+    } else if (notif.type === "new_story" || notif.type === "story_liked") {
+      navigate("/stories");
     }
     setOpen(false);
   };
