@@ -18,6 +18,7 @@ import Profile from "./pages/Profile";
 import Invites from "./pages/Invites";
 import Settings from "./pages/Settings";
 import ResetPassword from "./pages/ResetPassword";
+import FamilySelect from "./pages/FamilySelect";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
