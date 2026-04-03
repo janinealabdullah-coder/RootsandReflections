@@ -29,9 +29,7 @@ const FamilySelect = () => {
   const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
-    if (!loading && families.length === 0) {
-      navigate("/create-family");
-    }
+    // Don't auto-redirect — let users choose to create or join
   }, [loading, families, navigate]);
 
   const handleSelect = (familyId: string) => {
@@ -87,9 +85,18 @@ const FamilySelect = () => {
 
         {/* Family list */}
         <div className="roots-container mt-8 space-y-4 flex-1">
-          <p className="text-muted-foreground text-center mb-6">
-            Choose a family group to view
-          </p>
+          {families.length > 0 ? (
+            <p className="text-muted-foreground text-center mb-6">
+              Choose a family group to view
+            </p>
+          ) : (
+            <div className="text-center space-y-2 mb-6">
+              <h2 className="text-xl font-display font-bold text-foreground">Welcome!</h2>
+              <p className="text-muted-foreground">
+                You're not part of any family yet. Create a new family or join one with an invite code.
+              </p>
+            </div>
+          )}
 
           {families.map((f, i) => (
             <button
