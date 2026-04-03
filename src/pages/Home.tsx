@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { BookOpen, TreeDeciduous, Clock, Mail, UserCircle, Link2, Settings } from "lucide-react";
+import { BookOpen, TreeDeciduous, Clock, Mail, Link2, Settings } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import logoLight from "@/assets/logo-light.jpeg";
