@@ -12,6 +12,17 @@ import logoDark from "@/assets/logo-dark.jpeg";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
 import FamilySwitcher from "@/components/FamilySwitcher";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const features = [
   {
@@ -140,17 +151,36 @@ const Home = () => {
             >
               <UserCircle className="w-5 h-5" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={async () => {
-                await signOut();
-                navigate("/");
-              }}
-              aria-label="Sign out"
-            >
-              <LogOut className="w-5 h-5" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Sign out"
+                >
+                  <LogOut className="w-5 h-5" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Sign out?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to log out of your account?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      await signOut();
+                      navigate("/");
+                    }}
+                  >
+                    Log Out
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>
