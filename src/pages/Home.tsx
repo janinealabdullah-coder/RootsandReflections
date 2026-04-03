@@ -12,6 +12,17 @@ import logoDark from "@/assets/logo-dark.jpeg";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
 import FamilySwitcher from "@/components/FamilySwitcher";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const features = [
   {
