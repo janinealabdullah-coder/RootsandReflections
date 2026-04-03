@@ -18,7 +18,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const searchParams = new URLSearchParams(window.location.search);
-  const nextUrl = searchParams.get("next") || "/home";
+  const nextUrl = searchParams.get("next") || "/family-select";
 
 
   const handleForgotPassword = async (e: React.FormEvent) => {
