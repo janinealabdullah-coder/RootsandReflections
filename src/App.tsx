@@ -54,6 +54,14 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route
+              path="/family-select"
+              element={
+                <ProtectedRoute>
+                  <FamilySelect />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/create-family"
               element={
                 <ProtectedRoute>
