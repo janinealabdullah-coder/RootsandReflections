@@ -29,9 +29,7 @@ const FamilySelect = () => {
   const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
-    if (!loading && families.length === 0) {
-      navigate("/create-family");
-    }
+    // Don't auto-redirect — let users choose to create or join
   }, [loading, families, navigate]);
 
   const handleSelect = (familyId: string) => {
