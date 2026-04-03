@@ -77,19 +77,18 @@ const JoinFamily = () => {
   }
 
   const handleJoin = async () => {
-    if (!user || !familyId) return;
+    if (!user || !inviteCode) return;
     setLoading(true);
     try {
-      const { error } = await supabase.from("family_members").insert({
-        family_id: familyId,
-        user_id: user.id,
-        display_name: userName,
-        birth_year: birthYear ? parseInt(birthYear) : null,
-        relationship,
+      const { error } = await supabase.rpc("join_family", {
+        _invite_code: inviteCode.trim().toUpperCase(),
+        _display_name: userName,
+        _birth_year: birthYear ? parseInt(birthYear) : null,
+        _relationship: relationship || null,
       });
 
       if (error) {
-        if (error.code === "23505") {
+        if (error.message?.includes("Already a member")) {
           toast({
             title: "Already a member",
             description: "You're already part of this family!",
