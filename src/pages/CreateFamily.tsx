@@ -115,6 +115,31 @@ const CreateFamily = () => {
 
         {step === "info" && (
           <div className="animate-fade-up space-y-8">
+            {/* Welcome onboarding card */}
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-3">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                👋 Welcome to Roots!
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                You're about to create a private space for your family to share
+                stories, memories, and stay connected across generations.
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-2 pt-1">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold mt-0.5">1.</span>
+                  <span><strong className="text-foreground">Name your family</strong> — pick a name everyone will recognise.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold mt-0.5">2.</span>
+                  <span><strong className="text-foreground">Set up your profile</strong> — tell your family who you are.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold mt-0.5">3.</span>
+                  <span><strong className="text-foreground">Invite members</strong> — share a link so they can join.</span>
+                </li>
+              </ul>
+            </div>
+
             <div>
               <h1 className="roots-heading-2">Name Your Family</h1>
               <p className="roots-body-large mt-2">
