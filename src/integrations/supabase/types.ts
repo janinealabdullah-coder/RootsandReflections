@@ -343,6 +343,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_notification: {
+        Args: {
+          _body?: string
+          _family_id: string
+          _related_id?: string
+          _title: string
+          _type: string
+          _user_id: string
+        }
+        Returns: string
+      }
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean

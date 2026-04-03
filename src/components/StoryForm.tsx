@@ -198,12 +198,12 @@ const StoryForm = ({
       const otherMembers = members.filter((m) => m.user_id !== userId);
 
       for (const member of otherMembers) {
-        await supabase.from("notifications").insert({
-          user_id: member.user_id,
-          family_id: familyId,
-          type: "new_story",
-          title: `${authorName} shared a new story`,
-          body: `"${title.trim()}"`,
+        await supabase.rpc("create_notification", {
+          _user_id: member.user_id,
+          _family_id: familyId,
+          _type: "new_story",
+          _title: `${authorName} shared a new story`,
+          _body: `"${title.trim()}"`,
         });
       }
 
