@@ -78,13 +78,13 @@ export const useStoryLikes = (familyId: string | undefined) => {
 
         const likerName = member?.display_name || "Someone";
 
-        await supabase.from("notifications").insert({
-          user_id: storyAuthorId,
-          family_id: familyId,
-          type: "story_liked",
-          title: `${likerName} loved your story`,
-          body: `"${storyTitle}"`,
-          related_id: storyId,
+        await supabase.rpc("create_notification", {
+          _user_id: storyAuthorId,
+          _family_id: familyId,
+          _type: "story_liked",
+          _title: `${likerName} loved your story`,
+          _body: `"${storyTitle}"`,
+          _related_id: storyId,
         });
       }
     }
