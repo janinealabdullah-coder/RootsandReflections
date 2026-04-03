@@ -1,18 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFamily } from "@/hooks/use-family";
+import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import PageLayout from "@/components/PageLayout";
 import ThemeToggle from "@/components/ThemeToggle";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import { Button } from "@/components/ui/button";
-import { Users, Plus, LogIn } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Users, Plus, LogIn, LogOut } from "lucide-react";
 import logoLight from "@/assets/logo-light.jpeg";
 import logoDark from "@/assets/logo-dark.jpeg";
 
 const FamilySelect = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { signOut } = useAuth();
   const { families, switchFamily, loading } = useFamily();
+  const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
     if (!loading && families.length === 0) {
@@ -23,6 +37,11 @@ const FamilySelect = () => {
   const handleSelect = (familyId: string) => {
     switchFamily(familyId);
     navigate("/home");
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
   };
 
   if (loading) {
@@ -42,6 +61,7 @@ const FamilySelect = () => {
         <div className="bg-card border-b px-5 py-4">
           <div className="max-w-lg mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <HamburgerMenu />
               <img
                 src={theme === "dark" ? logoDark : logoLight}
                 alt="Roots & Reflections"
@@ -51,7 +71,17 @@ const FamilySelect = () => {
                 Your Families
               </h1>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowLogout(true)}
+                aria-label="Log out"
+              >
+                <LogOut className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -103,6 +133,24 @@ const FamilySelect = () => {
           </div>
         </div>
       </div>
+
+      {/* Logout confirmation */}
+      <AlertDialog open={showLogout} onOpenChange={setShowLogout}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Log Out</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to log out?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLogout}>
+              Log Out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageLayout>
   );
 };
