@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { BookOpen, TreeDeciduous, Clock, Mail, LogOut, UserCircle, Link2, Settings } from "lucide-react";
+import { BookOpen, TreeDeciduous, Clock, Mail, UserCircle, Link2, Settings } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import logoLight from "@/assets/logo-light.jpeg";
@@ -12,17 +12,7 @@ import logoDark from "@/assets/logo-dark.jpeg";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
 import FamilySwitcher from "@/components/FamilySwitcher";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import HamburgerMenu from "@/components/HamburgerMenu";
 
 const features = [
   {
