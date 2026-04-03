@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { FamilyProvider } from "@/contexts/FamilyContext";
 import Welcome from "./pages/Welcome";
 import Auth from "./pages/Auth";
 import CreateFamily from "./pages/CreateFamily";
@@ -48,7 +49,8 @@ const App = () => (
         <Toaster />
         <Sonner />
         <AuthProvider>
-          <BrowserRouter>
+          <FamilyProvider>
+           <BrowserRouter>
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/auth" element={<Auth />} />
@@ -144,6 +146,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           </BrowserRouter>
+          </FamilyProvider>
         </AuthProvider>
       </TooltipProvider>
     </ThemeProvider>
