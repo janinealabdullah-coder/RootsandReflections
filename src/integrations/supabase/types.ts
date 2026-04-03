@@ -358,6 +358,15 @@ export type Database = {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
       }
+      join_family: {
+        Args: {
+          _birth_year?: number
+          _display_name: string
+          _invite_code: string
+          _relationship?: string
+        }
+        Returns: string
+      }
       lookup_invite_code: {
         Args: { _code: string }
         Returns: {
