@@ -5,6 +5,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import logoLight from "@/assets/logo-light.jpeg";
 import logoDark from "@/assets/logo-dark.jpeg";
+import HamburgerMenu from "@/components/HamburgerMenu";
 
 interface PageHeaderProps {
   title: string;
@@ -19,7 +20,8 @@ const PageHeader = ({ title, backTo = "/home", actions }: PageHeaderProps) => {
   return (
     <div className="bg-card border-b px-5 py-4">
       <div className="max-w-lg mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <HamburgerMenu />
           <Button variant="ghost" size="icon" onClick={() => navigate(backTo)}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
