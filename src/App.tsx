@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { FamilyProvider } from "@/contexts/FamilyContext";
 import Welcome from "./pages/Welcome";
 import Auth from "./pages/Auth";
 import CreateFamily from "./pages/CreateFamily";
