@@ -20,6 +20,7 @@ import Invites from "./pages/Invites";
 import Settings from "./pages/Settings";
 import ResetPassword from "./pages/ResetPassword";
 import FamilySelect from "./pages/FamilySelect";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -140,6 +141,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
                 </ProtectedRoute>
               }
             />
