@@ -423,6 +423,51 @@ const StoryForm = ({
           />
         </div>
 
+        {/* Voice Memo */}
+        <div className="space-y-3">
+          <Label className="text-base font-semibold">
+            Voice Memo <span className="font-normal text-muted-foreground">(optional)</span>
+          </Label>
+          {audioUrl ? (
+            <div className="roots-card flex items-center gap-3 py-3">
+              <audio src={audioUrl} controls className="flex-1 h-10" />
+              <Button variant="ghost" size="icon" onClick={removeAudio} aria-label="Remove audio">
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              {recording ? (
+                <Button onClick={stopRecording} variant="destructive" className="flex-1 h-12">
+                  <Square className="w-4 h-4 mr-2" />
+                  Stop Recording
+                </Button>
+              ) : (
+                <Button onClick={startRecording} variant="outline" className="flex-1 h-12">
+                  <Mic className="w-4 h-4 mr-2" />
+                  Record
+                </Button>
+              )}
+              <Button
+                onClick={() => audioInputRef.current?.click()}
+                variant="outline"
+                className="h-12"
+                disabled={recording}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload
+              </Button>
+              <input
+                ref={audioInputRef}
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={handleAudioFile}
+              />
+            </div>
+          )}
+        </div>
+
         {/* Tag Family Members */}
         <div className="space-y-3">
           <Label className="text-base font-semibold">
