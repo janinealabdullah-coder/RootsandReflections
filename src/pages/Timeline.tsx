@@ -301,6 +301,11 @@ const Timeline = () => {
                   </div>
                 )}
 
+                {/* Audio */}
+                {selectedStory.audio_url && (
+                  <StoryAudioPlayer audioUrl={selectedStory.audio_url} />
+                )}
+
                 {/* Full content */}
                 <p className="text-foreground whitespace-pre-wrap leading-relaxed">
                   {selectedStory.content}
