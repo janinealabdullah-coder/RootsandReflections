@@ -369,23 +369,22 @@ const TreeBranch = ({
   relationships,
   getMemberName,
   onDeleteRel,
+  onMemberClick,
   isRoot,
 }: {
   node: TreeNode;
   relationships: Relationship[];
   getMemberName: (id: string) => string;
   onDeleteRel: (id: string) => void;
+  onMemberClick: (m: Member) => void;
   isRoot?: boolean;
 }) => {
   return (
     <div className="flex flex-col items-center">
-      <MemberCard member={node.member} highlight={isRoot} />
+      <MemberCard member={node.member} highlight={isRoot} onClick={onMemberClick} />
       {node.children.length > 0 && (
         <>
-          {/* Vertical connector down */}
           <div className="w-0.5 h-6 bg-primary/30" />
-
-          {/* Horizontal connector bar */}
           {node.children.length > 1 && (
             <div
               className="h-0.5 bg-primary/30"
@@ -394,8 +393,6 @@ const TreeBranch = ({
               }}
             />
           )}
-
-          {/* Children */}
           <div className="flex gap-4 items-start">
             {node.children.map((child) => (
               <div key={child.member.id} className="flex flex-col items-center">
@@ -405,6 +402,7 @@ const TreeBranch = ({
                   relationships={relationships}
                   getMemberName={getMemberName}
                   onDeleteRel={onDeleteRel}
+                  onMemberClick={onMemberClick}
                 />
               </div>
             ))}
