@@ -14,6 +14,11 @@ import {
   Users,
   Check,
   Lightbulb,
+  Mic,
+  Square,
+  Play,
+  Pause,
+  Upload,
 } from "lucide-react";
 
 interface Member {
