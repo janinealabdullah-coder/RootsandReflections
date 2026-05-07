@@ -237,7 +237,7 @@ const FamilyTree = () => {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {members.map((m) => (
-                <MemberCard key={m.id} member={m} />
+                <MemberCard key={m.id} member={m} onClick={openMemberProfile} />
               ))}
             </div>
           </div>
@@ -254,6 +254,7 @@ const FamilyTree = () => {
                     relationships={relationships}
                     getMemberName={getMemberName}
                     onDeleteRel={handleDeleteRelationship}
+                    onMemberClick={openMemberProfile}
                     isRoot
                   />
                 ))}
@@ -268,7 +269,7 @@ const FamilyTree = () => {
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {unconnected.map((m) => (
-                    <MemberCard key={m.id} member={m} />
+                    <MemberCard key={m.id} member={m} onClick={openMemberProfile} />
                   ))}
                 </div>
               </div>
