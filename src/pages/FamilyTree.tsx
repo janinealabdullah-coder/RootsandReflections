@@ -359,6 +359,55 @@ const FamilyTree = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Member profile dialog */}
+      <Dialog open={!!selectedMember} onOpenChange={(o) => !o && setSelectedMember(null)}>
+        <DialogContent className="sm:max-w-sm">
+          {selectedMember && (
+            <>
+              <DialogHeader>
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                    {selectedMember.avatar_url ? (
+                      <img src={selectedMember.avatar_url} alt={selectedMember.display_name} className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-10 h-10 text-primary" />
+                    )}
+                  </div>
+                  <DialogTitle className="text-xl font-display">{selectedMember.display_name}</DialogTitle>
+                  <DialogDescription className="text-base">
+                    {[selectedMember.relationship, selectedMember.birth_year ? `b. ${selectedMember.birth_year}` : null].filter(Boolean).join(" · ") || "Family member"}
+                  </DialogDescription>
+                </div>
+              </DialogHeader>
+              <div className="space-y-2 pt-2">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Stories</p>
+                {storiesLoading ? (
+                  <p className="text-sm text-muted-foreground">Loading…</p>
+                ) : memberStories.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No stories yet.</p>
+                ) : (
+                  memberStories.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        setSelectedMember(null);
+                        navigate("/timeline");
+                      }}
+                      className="w-full text-left roots-card py-2 px-3 hover:border-primary/40"
+                    >
+                      <p className="font-semibold text-foreground text-sm">{s.title}</p>
+                      {(s.year || s.decade) && (
+                        <p className="text-xs text-muted-foreground">{s.year || s.decade}</p>
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       </div>
     </PageLayout>
   );
