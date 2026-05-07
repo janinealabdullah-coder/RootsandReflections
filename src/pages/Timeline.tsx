@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import StoryAudioPlayer from "@/components/StoryAudioPlayer";
 
 interface Story {
   id: string;
