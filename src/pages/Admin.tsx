@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import PageLayout from "@/components/PageLayout";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -109,7 +110,8 @@ const Admin = () => {
 
   if (roleLoading) {
     return (
-      <PageLayout title="Admin">
+      <PageLayout>
+        <PageHeader />
         <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin" /></div>
       </PageLayout>
     );
