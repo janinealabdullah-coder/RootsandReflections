@@ -231,6 +231,18 @@ const StoryForm = ({
         photoUrls.push(urlData.publicUrl);
       }
 
+      // Upload audio if present
+      let audioPath: string | null = null;
+      if (audioBlob) {
+        const ext = (audioBlob as File).name?.split(".").pop() || "webm";
+        const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: audioErr } = await supabase.storage
+          .from("story-audio")
+          .upload(path, audioBlob, { contentType: audioBlob.type || "audio/webm" });
+        if (audioErr) throw audioErr;
+        audioPath = path;
+      }
+
       const { error } = await supabase.from("stories").insert({
         family_id: familyId,
         author_id: userId,
@@ -241,6 +253,7 @@ const StoryForm = ({
         privacy,
         tagged_members: taggedIds.length > 0 ? taggedIds : [],
         photo_urls: photoUrls.length > 0 ? photoUrls : [],
+        audio_url: audioPath,
       });
 
       if (error) throw error;
