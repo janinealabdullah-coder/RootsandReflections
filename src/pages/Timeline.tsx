@@ -23,6 +23,7 @@ interface Story {
   year: number | null;
   decade: string | null;
   photo_urls: string[] | null;
+  audio_url: string | null;
   tagged_members: string[] | null;
   privacy: string;
   author_id: string;
