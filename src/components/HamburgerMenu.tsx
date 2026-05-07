@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +21,7 @@ import {
   Settings,
   UserCircle,
   Users,
+  Shield,
   LogOut,
 } from "lucide-react";
 import {
@@ -49,6 +51,7 @@ const HamburgerMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [open, setOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
 
@@ -87,6 +90,20 @@ const HamburgerMenu = () => {
                 </button>
               );
             })}
+
+            {isAdmin && (
+              <button
+                onClick={() => handleNav("/admin")}
+                className={`flex items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/60 ${
+                  location.pathname === "/admin"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-foreground"
+                }`}
+              >
+                <Shield className="w-5 h-5 shrink-0" />
+                <span>Admin</span>
+              </button>
+            )}
 
             <div className="border-t my-2" />
 
