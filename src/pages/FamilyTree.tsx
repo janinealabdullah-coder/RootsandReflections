@@ -419,15 +419,19 @@ const TreeBranch = ({
 const MemberCard = ({
   member,
   highlight,
+  onClick,
 }: {
   member: Member;
   highlight?: boolean;
+  onClick?: (m: Member) => void;
 }) => {
+  const Wrapper: any = onClick ? "button" : "div";
   return (
-    <div
+    <Wrapper
+      onClick={onClick ? () => onClick(member) : undefined}
       className={`roots-card flex flex-col items-center text-center py-4 px-5 min-w-[120px] transition-shadow ${
         highlight ? "ring-2 ring-primary/40 shadow-md" : ""
-      }`}
+      } ${onClick ? "hover:shadow-md hover:border-primary/40 cursor-pointer w-full" : ""}`}
     >
       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
         {member.avatar_url ? (
@@ -447,7 +451,7 @@ const MemberCard = ({
       {member.birth_year && (
         <p className="text-xs text-muted-foreground">b. {member.birth_year}</p>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
