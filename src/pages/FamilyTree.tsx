@@ -54,6 +54,22 @@ const FamilyTree = () => {
   const [parentId, setParentId] = useState("");
   const [childId, setChildId] = useState("");
   const [saving, setSaving] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [memberStories, setMemberStories] = useState<{ id: string; title: string; year: number | null; decade: string | null }[]>([]);
+  const [storiesLoading, setStoriesLoading] = useState(false);
+
+  const openMemberProfile = useCallback(async (member: Member) => {
+    setSelectedMember(member);
+    setStoriesLoading(true);
+    const { data } = await supabase
+      .from("stories")
+      .select("id, title, year, decade")
+      .eq("family_id", family!.familyId)
+      .eq("author_id", member.user_id)
+      .order("year", { ascending: false, nullsFirst: false });
+    setMemberStories(data || []);
+    setStoriesLoading(false);
+  }, [family]);
 
   const loadData = useCallback(async () => {
     if (!family) return;
