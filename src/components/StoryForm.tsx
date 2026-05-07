@@ -14,6 +14,11 @@ import {
   Users,
   Check,
   Lightbulb,
+  Mic,
+  Square,
+  Play,
+  Pause,
+  Upload,
 } from "lucide-react";
 
 interface Member {
@@ -93,8 +98,13 @@ const StoryForm = ({
   const [taggedIds, setTaggedIds] = useState<string[]>(draft.taggedIds || []);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [recorderRef] = useState<{ current: MediaRecorder | null }>({ current: null });
+  const audioInputRef = useRef<HTMLInputElement>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [showPrompts, setShowPrompts] = useState(false);
+  const [showPrompts, setShowPrompts] = useState(true);
   const [hasDraft, setHasDraft] = useState(!!draft.title || !!draft.content);
 
   // Auto-save draft
@@ -154,6 +164,49 @@ const StoryForm = ({
     setShowPrompts(false);
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mr = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+      mr.ondataavailable = (e) => e.data.size > 0 && chunks.push(e.data);
+      mr.onstop = () => {
+        const blob = new Blob(chunks, { type: "audio/webm" });
+        setAudioBlob(blob);
+        setAudioUrl(URL.createObjectURL(blob));
+        stream.getTracks().forEach((t) => t.stop());
+      };
+      mr.start();
+      recorderRef.current = mr;
+      setRecording(true);
+    } catch (err) {
+      toast({ title: "Microphone unavailable", description: "Please allow microphone access.", variant: "destructive" });
+    }
+  };
+
+  const stopRecording = () => {
+    recorderRef.current?.stop();
+    recorderRef.current = null;
+    setRecording(false);
+  };
+
+  const handleAudioFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Audio must be under 20MB.", variant: "destructive" });
+      return;
+    }
+    setAudioBlob(file);
+    setAudioUrl(URL.createObjectURL(file));
+  };
+
+  const removeAudio = () => {
+    setAudioBlob(null);
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    setAudioUrl(null);
+  };
+
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) {
       toast({ title: "Missing fields", description: "Please add a title and your story.", variant: "destructive" });
@@ -178,6 +231,18 @@ const StoryForm = ({
         photoUrls.push(urlData.publicUrl);
       }
 
+      // Upload audio if present
+      let audioPath: string | null = null;
+      if (audioBlob) {
+        const ext = (audioBlob as File).name?.split(".").pop() || "webm";
+        const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error: audioErr } = await supabase.storage
+          .from("story-audio")
+          .upload(path, audioBlob, { contentType: audioBlob.type || "audio/webm" });
+        if (audioErr) throw audioErr;
+        audioPath = path;
+      }
+
       const { error } = await supabase.from("stories").insert({
         family_id: familyId,
         author_id: userId,
@@ -188,6 +253,7 @@ const StoryForm = ({
         privacy,
         tagged_members: taggedIds.length > 0 ? taggedIds : [],
         photo_urls: photoUrls.length > 0 ? photoUrls : [],
+        audio_url: audioPath,
       });
 
       if (error) throw error;
@@ -355,6 +421,51 @@ const StoryForm = ({
             className="hidden"
             onChange={handlePhotoSelect}
           />
+        </div>
+
+        {/* Voice Memo */}
+        <div className="space-y-3">
+          <Label className="text-base font-semibold">
+            Voice Memo <span className="font-normal text-muted-foreground">(optional)</span>
+          </Label>
+          {audioUrl ? (
+            <div className="roots-card flex items-center gap-3 py-3">
+              <audio src={audioUrl} controls className="flex-1 h-10" />
+              <Button variant="ghost" size="icon" onClick={removeAudio} aria-label="Remove audio">
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              {recording ? (
+                <Button onClick={stopRecording} variant="destructive" className="flex-1 h-12">
+                  <Square className="w-4 h-4 mr-2" />
+                  Stop Recording
+                </Button>
+              ) : (
+                <Button onClick={startRecording} variant="outline" className="flex-1 h-12">
+                  <Mic className="w-4 h-4 mr-2" />
+                  Record
+                </Button>
+              )}
+              <Button
+                onClick={() => audioInputRef.current?.click()}
+                variant="outline"
+                className="h-12"
+                disabled={recording}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload
+              </Button>
+              <input
+                ref={audioInputRef}
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={handleAudioFile}
+              />
+            </div>
+          )}
         </div>
 
         {/* Tag Family Members */}

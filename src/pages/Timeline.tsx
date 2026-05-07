@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import StoryAudioPlayer from "@/components/StoryAudioPlayer";
 
 interface Story {
   id: string;
@@ -23,6 +24,7 @@ interface Story {
   year: number | null;
   decade: string | null;
   photo_urls: string[] | null;
+  audio_url: string | null;
   tagged_members: string[] | null;
   privacy: string;
   author_id: string;
@@ -58,7 +60,7 @@ const Timeline = () => {
     const load = async () => {
       const { data } = await supabase
         .from("stories")
-        .select("id, title, content, year, decade, photo_urls, tagged_members, privacy, author_id, created_at")
+        .select("id, title, content, year, decade, photo_urls, audio_url, tagged_members, privacy, author_id, created_at")
         .eq("family_id", family.familyId)
         .order("year", { ascending: false, nullsFirst: false });
 
@@ -298,6 +300,11 @@ const Timeline = () => {
                       </div>
                     ))}
                   </div>
+                )}
+
+                {/* Audio */}
+                {selectedStory.audio_url && (
+                  <StoryAudioPlayer audioUrl={selectedStory.audio_url} />
                 )}
 
                 {/* Full content */}

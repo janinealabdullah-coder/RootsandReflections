@@ -54,6 +54,22 @@ const FamilyTree = () => {
   const [parentId, setParentId] = useState("");
   const [childId, setChildId] = useState("");
   const [saving, setSaving] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [memberStories, setMemberStories] = useState<{ id: string; title: string; year: number | null; decade: string | null }[]>([]);
+  const [storiesLoading, setStoriesLoading] = useState(false);
+
+  const openMemberProfile = useCallback(async (member: Member) => {
+    setSelectedMember(member);
+    setStoriesLoading(true);
+    const { data } = await supabase
+      .from("stories")
+      .select("id, title, year, decade")
+      .eq("family_id", family!.familyId)
+      .eq("author_id", member.user_id)
+      .order("year", { ascending: false, nullsFirst: false });
+    setMemberStories(data || []);
+    setStoriesLoading(false);
+  }, [family]);
 
   const loadData = useCallback(async () => {
     if (!family) return;
@@ -221,7 +237,7 @@ const FamilyTree = () => {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {members.map((m) => (
-                <MemberCard key={m.id} member={m} />
+                <MemberCard key={m.id} member={m} onClick={openMemberProfile} />
               ))}
             </div>
           </div>
@@ -238,6 +254,7 @@ const FamilyTree = () => {
                     relationships={relationships}
                     getMemberName={getMemberName}
                     onDeleteRel={handleDeleteRelationship}
+                    onMemberClick={openMemberProfile}
                     isRoot
                   />
                 ))}
@@ -252,7 +269,7 @@ const FamilyTree = () => {
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {unconnected.map((m) => (
-                    <MemberCard key={m.id} member={m} />
+                    <MemberCard key={m.id} member={m} onClick={openMemberProfile} />
                   ))}
                 </div>
               </div>
@@ -342,6 +359,55 @@ const FamilyTree = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Member profile dialog */}
+      <Dialog open={!!selectedMember} onOpenChange={(o) => !o && setSelectedMember(null)}>
+        <DialogContent className="sm:max-w-sm">
+          {selectedMember && (
+            <>
+              <DialogHeader>
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                    {selectedMember.avatar_url ? (
+                      <img src={selectedMember.avatar_url} alt={selectedMember.display_name} className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-10 h-10 text-primary" />
+                    )}
+                  </div>
+                  <DialogTitle className="text-xl font-display">{selectedMember.display_name}</DialogTitle>
+                  <DialogDescription className="text-base">
+                    {[selectedMember.relationship, selectedMember.birth_year ? `b. ${selectedMember.birth_year}` : null].filter(Boolean).join(" · ") || "Family member"}
+                  </DialogDescription>
+                </div>
+              </DialogHeader>
+              <div className="space-y-2 pt-2">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Stories</p>
+                {storiesLoading ? (
+                  <p className="text-sm text-muted-foreground">Loading…</p>
+                ) : memberStories.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No stories yet.</p>
+                ) : (
+                  memberStories.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        setSelectedMember(null);
+                        navigate("/timeline");
+                      }}
+                      className="w-full text-left roots-card py-2 px-3 hover:border-primary/40"
+                    >
+                      <p className="font-semibold text-foreground text-sm">{s.title}</p>
+                      {(s.year || s.decade) && (
+                        <p className="text-xs text-muted-foreground">{s.year || s.decade}</p>
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       </div>
     </PageLayout>
   );
@@ -353,23 +419,22 @@ const TreeBranch = ({
   relationships,
   getMemberName,
   onDeleteRel,
+  onMemberClick,
   isRoot,
 }: {
   node: TreeNode;
   relationships: Relationship[];
   getMemberName: (id: string) => string;
   onDeleteRel: (id: string) => void;
+  onMemberClick: (m: Member) => void;
   isRoot?: boolean;
 }) => {
   return (
     <div className="flex flex-col items-center">
-      <MemberCard member={node.member} highlight={isRoot} />
+      <MemberCard member={node.member} highlight={isRoot} onClick={onMemberClick} />
       {node.children.length > 0 && (
         <>
-          {/* Vertical connector down */}
           <div className="w-0.5 h-6 bg-primary/30" />
-
-          {/* Horizontal connector bar */}
           {node.children.length > 1 && (
             <div
               className="h-0.5 bg-primary/30"
@@ -378,8 +443,6 @@ const TreeBranch = ({
               }}
             />
           )}
-
-          {/* Children */}
           <div className="flex gap-4 items-start">
             {node.children.map((child) => (
               <div key={child.member.id} className="flex flex-col items-center">
@@ -389,6 +452,7 @@ const TreeBranch = ({
                   relationships={relationships}
                   getMemberName={getMemberName}
                   onDeleteRel={onDeleteRel}
+                  onMemberClick={onMemberClick}
                 />
               </div>
             ))}
@@ -403,15 +467,19 @@ const TreeBranch = ({
 const MemberCard = ({
   member,
   highlight,
+  onClick,
 }: {
   member: Member;
   highlight?: boolean;
+  onClick?: (m: Member) => void;
 }) => {
+  const Wrapper: any = onClick ? "button" : "div";
   return (
-    <div
+    <Wrapper
+      onClick={onClick ? () => onClick(member) : undefined}
       className={`roots-card flex flex-col items-center text-center py-4 px-5 min-w-[120px] transition-shadow ${
         highlight ? "ring-2 ring-primary/40 shadow-md" : ""
-      }`}
+      } ${onClick ? "hover:shadow-md hover:border-primary/40 cursor-pointer w-full" : ""}`}
     >
       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
         {member.avatar_url ? (
@@ -431,7 +499,7 @@ const MemberCard = ({
       {member.birth_year && (
         <p className="text-xs text-muted-foreground">b. {member.birth_year}</p>
       )}
-    </div>
+    </Wrapper>
   );
 };
 

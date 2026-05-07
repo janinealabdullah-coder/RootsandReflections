@@ -42,3 +42,18 @@ export async function resolveStoryPhotos<T extends { photo_urls: string[] | null
   );
   return resolved;
 }
+
+/**
+ * Get a signed URL for a single audio file from the story-audio bucket.
+ */
+export async function getSignedAudioUrl(audioUrl: string | null): Promise<string | null> {
+  if (!audioUrl) return null;
+  const marker = "/object/public/story-audio/";
+  const idx = audioUrl.indexOf(marker);
+  const path = idx !== -1 ? audioUrl.slice(idx + marker.length) : audioUrl;
+  const { data, error } = await supabase.storage
+    .from("story-audio")
+    .createSignedUrl(path, 3600);
+  if (error || !data) return null;
+  return data.signedUrl;
+}
