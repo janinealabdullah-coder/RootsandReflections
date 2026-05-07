@@ -171,6 +171,7 @@ export type Database = {
       }
       memory_capsules: {
         Row: {
+          audio_url: string | null
           author_id: string
           created_at: string
           family_id: string
@@ -181,6 +182,7 @@ export type Database = {
           unlock_date: string
         }
         Insert: {
+          audio_url?: string | null
           author_id: string
           created_at?: string
           family_id: string
@@ -191,6 +193,7 @@ export type Database = {
           unlock_date: string
         }
         Update: {
+          audio_url?: string | null
           author_id?: string
           created_at?: string
           family_id?: string
@@ -248,6 +251,7 @@ export type Database = {
       }
       stories: {
         Row: {
+          audio_url: string | null
           author_id: string
           content: string
           created_at: string
@@ -262,6 +266,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
+          audio_url?: string | null
           author_id: string
           content: string
           created_at?: string
@@ -276,6 +281,7 @@ export type Database = {
           year?: number | null
         }
         Update: {
+          audio_url?: string | null
           author_id?: string
           content?: string
           created_at?: string
