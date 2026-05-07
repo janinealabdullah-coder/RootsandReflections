@@ -111,7 +111,7 @@ const Admin = () => {
   if (roleLoading) {
     return (
       <PageLayout>
-        <PageHeader />
+        <PageHeader title="Admin" />
         <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin" /></div>
       </PageLayout>
     );
@@ -130,8 +130,9 @@ const Admin = () => {
   const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : "—");
 
   return (
-    <PageLayout title="Admin · Users">
-      <div className="space-y-4">
+    <PageLayout>
+      <PageHeader title="Admin · Users" />
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
           <p className="text-muted-foreground">
             Manage all users on the platform. {users.length} total.
