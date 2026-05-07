@@ -98,8 +98,13 @@ const StoryForm = ({
   const [taggedIds, setTaggedIds] = useState<string[]>(draft.taggedIds || []);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [recorderRef] = useState<{ current: MediaRecorder | null }>({ current: null });
+  const audioInputRef = useRef<HTMLInputElement>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [showPrompts, setShowPrompts] = useState(false);
+  const [showPrompts, setShowPrompts] = useState(true);
   const [hasDraft, setHasDraft] = useState(!!draft.title || !!draft.content);
 
   // Auto-save draft
