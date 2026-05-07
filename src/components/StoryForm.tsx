@@ -164,6 +164,49 @@ const StoryForm = ({
     setShowPrompts(false);
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mr = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+      mr.ondataavailable = (e) => e.data.size > 0 && chunks.push(e.data);
+      mr.onstop = () => {
+        const blob = new Blob(chunks, { type: "audio/webm" });
+        setAudioBlob(blob);
+        setAudioUrl(URL.createObjectURL(blob));
+        stream.getTracks().forEach((t) => t.stop());
+      };
+      mr.start();
+      recorderRef.current = mr;
+      setRecording(true);
+    } catch (err) {
+      toast({ title: "Microphone unavailable", description: "Please allow microphone access.", variant: "destructive" });
+    }
+  };
+
+  const stopRecording = () => {
+    recorderRef.current?.stop();
+    recorderRef.current = null;
+    setRecording(false);
+  };
+
+  const handleAudioFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Audio must be under 20MB.", variant: "destructive" });
+      return;
+    }
+    setAudioBlob(file);
+    setAudioUrl(URL.createObjectURL(file));
+  };
+
+  const removeAudio = () => {
+    setAudioBlob(null);
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    setAudioUrl(null);
+  };
+
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) {
       toast({ title: "Missing fields", description: "Please add a title and your story.", variant: "destructive" });
