@@ -197,7 +197,21 @@ const Auth = () => {
             )}
           </div>
 
-          <Button size="xl" className="w-full" disabled={loading}>
+          {isSignUp && (
+            <label className="flex items-start gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={ageConfirmed}
+                onChange={(e) => setAgeConfirmed(e.target.checked)}
+                className="mt-1 h-5 w-5 shrink-0 rounded border-input accent-primary cursor-pointer"
+              />
+              <span className="text-base text-foreground leading-snug">
+                I confirm that I am 13 years of age or older.
+              </span>
+            </label>
+          )}
+
+          <Button size="xl" className="w-full" disabled={loading || (isSignUp && !ageConfirmed)}>
             {loading
               ? "Please wait..."
               : isSignUp
