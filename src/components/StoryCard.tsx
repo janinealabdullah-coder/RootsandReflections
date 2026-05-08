@@ -201,6 +201,57 @@ const StoryCard = ({
           </span>
         </div>
       </div>
+
+      {showRequestRemoval && (
+        <div className="pt-1 flex justify-end">
+          <button
+            onClick={() => setFlagOpen(true)}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground underline-offset-2 hover:underline transition-colors"
+          >
+            <Flag className="w-3 h-3" />
+            Request Removal
+          </button>
+        </div>
+      )}
+
+      <Dialog open={flagOpen} onOpenChange={setFlagOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Request Removal</DialogTitle>
+            <DialogDescription>
+              Let the family admin know why you'd like this story reviewed. The
+              story won't be deleted automatically.
+            </DialogDescription>
+          </DialogHeader>
+
+          <RadioGroup value={reason} onValueChange={setReason} className="space-y-2">
+            {[
+              "This story is inaccurate",
+              "This story is private and I did not consent",
+              "Other",
+            ].map((opt) => (
+              <div key={opt} className="flex items-center space-x-2">
+                <RadioGroupItem value={opt} id={`reason-${story.id}-${opt}`} />
+                <Label
+                  htmlFor={`reason-${story.id}-${opt}`}
+                  className="text-base font-normal cursor-pointer"
+                >
+                  {opt}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setFlagOpen(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmitFlag} disabled={submitting}>
+              {submitting ? "Sending…" : "Send request"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
