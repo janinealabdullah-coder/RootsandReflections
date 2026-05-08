@@ -253,6 +253,9 @@ const CreateFamily = () => {
               <p className="text-sm text-muted-foreground">
                 Only people with this link can join your family group.
               </p>
+              <p className="text-sm text-muted-foreground border-t pt-3">
+                Beta families are limited to 10 members. Upgrade options coming soon.
+              </p>
             </div>
 
             <div className="space-y-3">

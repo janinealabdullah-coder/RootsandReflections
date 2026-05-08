@@ -80,6 +80,25 @@ const JoinFamily = () => {
     if (!user || !inviteCode) return;
     setLoading(true);
     try {
+      // Beta limit: max 10 members per family (frontend check)
+      if (familyId) {
+        const { count, error: countError } = await supabase
+          .from("family_members")
+          .select("id", { count: "exact", head: true })
+          .eq("family_id", familyId);
+        if (countError) throw countError;
+        if ((count ?? 0) >= 10) {
+          toast({
+            title: "Family is full",
+            description:
+              "This family has reached the 10-member limit for the beta. The family admin can upgrade to add more members.",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+      }
+
       const { error } = await supabase.rpc("join_family", {
         _invite_code: inviteCode.trim().toUpperCase(),
         _display_name: userName,
