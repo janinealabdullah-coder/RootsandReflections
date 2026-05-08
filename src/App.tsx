@@ -153,6 +153,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin/flags"
+              element={
+                <ProtectedRoute>
+                  <AdminFlags />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
           </BrowserRouter>
