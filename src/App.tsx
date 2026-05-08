@@ -22,6 +22,7 @@ import ResetPassword from "./pages/ResetPassword";
 import FamilySelect from "./pages/FamilySelect";
 import Admin from "./pages/Admin";
 import AdminFlags from "./pages/AdminFlags";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/" element={<Welcome />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route
               path="/family-select"
               element={
