@@ -280,8 +280,93 @@ const Profile = () => {
         >
           {saving ? "Saving…" : "Save Changes"}
         </Button>
+
+        {/* Privacy & Account — GDPR / CCPA / App Store compliance */}
+        <div className="mt-12 pt-8 border-t border-border space-y-6">
+          <div>
+            <h2 className="text-xl font-display font-bold text-foreground mb-2">
+              Your Data & Privacy
+            </h2>
+            <p className="text-base text-muted-foreground">
+              You have the right to download a copy of your data or delete your account at any time.
+            </p>
+          </div>
+
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full gap-2"
+            onClick={handleExportData}
+            disabled={exporting}
+          >
+            <Download className="w-5 h-5" />
+            {exporting ? "Preparing your data…" : "Download My Data"}
+          </Button>
+
+          <div className="rounded-xl border-2 border-destructive/30 bg-destructive/5 p-5 space-y-3">
+            <div className="flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-display font-bold text-foreground">Delete Account</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Permanently delete your account and all your stories, photos, capsules, and likes.
+                  This cannot be undone.
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="destructive"
+              size="lg"
+              className="w-full gap-2"
+              onClick={() => {
+                setConfirmText("");
+                setShowDeleteDialog(true);
+              }}
+            >
+              <Trash2 className="w-5 h-5" />
+              Delete My Account
+            </Button>
+          </div>
+        </div>
       </div>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete your account permanently?</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <span className="block">
+                This will permanently delete your account, your stories, photos, audio recordings,
+                memory capsules, and likes. Family members you invited will remain.
+              </span>
+              <span className="block font-semibold text-foreground pt-2">
+                Type <span className="font-mono">DELETE</span> below to confirm.
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder="Type DELETE"
+            className="h-12 text-base"
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeleteAccount();
+              }}
+              disabled={deleting || confirmText !== "DELETE"}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "Deleting…" : "Delete Forever"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageLayout>
   );
 };
