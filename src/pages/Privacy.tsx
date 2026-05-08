@@ -1,4 +1,5 @@
 import PageLayout from "@/components/PageLayout";
+import SiteFooter from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -209,6 +210,7 @@ const Privacy = () => {
           </div>
         </div>
       </div>
+      <SiteFooter />
     </PageLayout>
   );
 };
