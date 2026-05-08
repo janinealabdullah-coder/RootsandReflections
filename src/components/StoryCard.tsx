@@ -1,5 +1,19 @@
-import { CSSProperties } from "react";
-import { Lock, Globe, Users, Calendar, Heart } from "lucide-react";
+import { CSSProperties, useState } from "react";
+import { Lock, Globe, Users, Calendar, Heart, Flag } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface Story {
   id: string;
