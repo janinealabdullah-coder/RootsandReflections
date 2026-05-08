@@ -60,6 +60,11 @@ const StoryCard = ({
   likeData?: LikeData;
   onToggleLike?: () => void;
 }) => {
+  const { user } = useAuth();
+  const [flagOpen, setFlagOpen] = useState(false);
+  const [reason, setReason] = useState("This story is inaccurate");
+  const [submitting, setSubmitting] = useState(false);
+
   const privacyInfo =
     privacyIcons[story.privacy as keyof typeof privacyIcons] ||
     privacyIcons["family-only"];
@@ -71,12 +76,52 @@ const StoryCard = ({
 
   const authorName =
     members.find((m) => m.user_id === story.author_id)?.display_name || "Unknown";
+  const myName =
+    members.find((m) => m.user_id === user?.id)?.display_name || "A family member";
 
   const timeLabel = story.year
     ? String(story.year)
     : story.decade
     ? story.decade
     : null;
+
+  const showRequestRemoval = !!user && user.id !== story.author_id;
+
+  const handleSubmitFlag = async () => {
+    setSubmitting(true);
+    try {
+      const { data: storyRow, error: storyErr } = await supabase
+        .from("stories")
+        .select("family_id")
+        .eq("id", story.id)
+        .single();
+      if (storyErr || !storyRow) throw storyErr || new Error("Story not found");
+
+      const { data: famRow, error: famErr } = await supabase
+        .from("families")
+        .select("created_by")
+        .eq("id", storyRow.family_id)
+        .single();
+      if (famErr || !famRow) throw famErr || new Error("Family not found");
+
+      const { error: rpcErr } = await supabase.rpc("create_notification", {
+        _user_id: famRow.created_by,
+        _family_id: storyRow.family_id,
+        _type: "story_flag",
+        _title: `${myName} requested removal of a story`,
+        _body: `Story: "${story.title}"\nReason: ${reason}`,
+        _related_id: story.id,
+      });
+      if (rpcErr) throw rpcErr;
+
+      toast.success("Your request has been sent to the family admin.");
+      setFlagOpen(false);
+    } catch (e: any) {
+      toast.error(e?.message || "Could not send request. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="roots-card space-y-3 animate-fade-up" style={style}>
