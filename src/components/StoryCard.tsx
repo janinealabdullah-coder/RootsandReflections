@@ -1,5 +1,19 @@
-import { CSSProperties } from "react";
-import { Lock, Globe, Users, Calendar, Heart } from "lucide-react";
+import { CSSProperties, useState } from "react";
+import { Lock, Globe, Users, Calendar, Heart, Flag } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface Story {
   id: string;
@@ -46,6 +60,11 @@ const StoryCard = ({
   likeData?: LikeData;
   onToggleLike?: () => void;
 }) => {
+  const { user } = useAuth();
+  const [flagOpen, setFlagOpen] = useState(false);
+  const [reason, setReason] = useState("This story is inaccurate");
+  const [submitting, setSubmitting] = useState(false);
+
   const privacyInfo =
     privacyIcons[story.privacy as keyof typeof privacyIcons] ||
     privacyIcons["family-only"];
@@ -57,12 +76,52 @@ const StoryCard = ({
 
   const authorName =
     members.find((m) => m.user_id === story.author_id)?.display_name || "Unknown";
+  const myName =
+    members.find((m) => m.user_id === user?.id)?.display_name || "A family member";
 
   const timeLabel = story.year
     ? String(story.year)
     : story.decade
     ? story.decade
     : null;
+
+  const showRequestRemoval = !!user && user.id !== story.author_id;
+
+  const handleSubmitFlag = async () => {
+    setSubmitting(true);
+    try {
+      const { data: storyRow, error: storyErr } = await supabase
+        .from("stories")
+        .select("family_id")
+        .eq("id", story.id)
+        .single();
+      if (storyErr || !storyRow) throw storyErr || new Error("Story not found");
+
+      const { data: famRow, error: famErr } = await supabase
+        .from("families")
+        .select("created_by")
+        .eq("id", storyRow.family_id)
+        .single();
+      if (famErr || !famRow) throw famErr || new Error("Family not found");
+
+      const { error: rpcErr } = await supabase.rpc("create_notification", {
+        _user_id: famRow.created_by,
+        _family_id: storyRow.family_id,
+        _type: "story_flag",
+        _title: `${myName} requested removal of a story`,
+        _body: `Story: "${story.title}"\nReason: ${reason}`,
+        _related_id: story.id,
+      });
+      if (rpcErr) throw rpcErr;
+
+      toast.success("Your request has been sent to the family admin.");
+      setFlagOpen(false);
+    } catch (e: any) {
+      toast.error(e?.message || "Could not send request. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="roots-card space-y-3 animate-fade-up" style={style}>
@@ -142,6 +201,57 @@ const StoryCard = ({
           </span>
         </div>
       </div>
+
+      {showRequestRemoval && (
+        <div className="pt-1 flex justify-end">
+          <button
+            onClick={() => setFlagOpen(true)}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground underline-offset-2 hover:underline transition-colors"
+          >
+            <Flag className="w-3 h-3" />
+            Request Removal
+          </button>
+        </div>
+      )}
+
+      <Dialog open={flagOpen} onOpenChange={setFlagOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Request Removal</DialogTitle>
+            <DialogDescription>
+              Let the family admin know why you'd like this story reviewed. The
+              story won't be deleted automatically.
+            </DialogDescription>
+          </DialogHeader>
+
+          <RadioGroup value={reason} onValueChange={setReason} className="space-y-2">
+            {[
+              "This story is inaccurate",
+              "This story is private and I did not consent",
+              "Other",
+            ].map((opt) => (
+              <div key={opt} className="flex items-center space-x-2">
+                <RadioGroupItem value={opt} id={`reason-${story.id}-${opt}`} />
+                <Label
+                  htmlFor={`reason-${story.id}-${opt}`}
+                  className="text-base font-normal cursor-pointer"
+                >
+                  {opt}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setFlagOpen(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmitFlag} disabled={submitting}>
+              {submitting ? "Sending…" : "Send request"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
