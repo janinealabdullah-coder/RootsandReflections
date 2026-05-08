@@ -250,7 +250,17 @@ const Auth = () => {
                   className="mt-1 h-5 w-5 shrink-0 rounded border-input accent-primary cursor-pointer"
                 />
                 <span className="text-base text-foreground leading-snug">
-                  I have read and agree to the Terms of Service,{" "}
+                  I have read and agree to the{" "}
+                  <a
+                    href="/terms"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="underline text-primary"
+                  >
+                    Terms of Service
+                  </a>
+                  ,{" "}
                   <a
                     href="/privacy"
                     target="_blank"
