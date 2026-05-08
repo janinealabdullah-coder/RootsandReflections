@@ -58,6 +58,7 @@ const App = () => (
             <Route path="/" element={<Welcome />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route
               path="/family-select"
               element={
