@@ -20,6 +20,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [policyAgreed, setPolicyAgreed] = useState(false);
   const searchParams = new URLSearchParams(window.location.search);
   const nextUrl = searchParams.get("next") || "/family-select";
 
