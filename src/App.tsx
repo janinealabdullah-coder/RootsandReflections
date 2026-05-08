@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import ResetPassword from "./pages/ResetPassword";
 import FamilySelect from "./pages/FamilySelect";
 import Admin from "./pages/Admin";
+import AdminFlags from "./pages/AdminFlags";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
