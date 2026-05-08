@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import SiteFooter from "@/components/SiteFooter";
 import { useAuth } from "@/contexts/AuthContext";
 import heroTree from "@/assets/hero-tree.jpg";
 import logo from "@/assets/logo.jpeg";
@@ -117,6 +118,7 @@ const Welcome = () => {
           </div>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 };
