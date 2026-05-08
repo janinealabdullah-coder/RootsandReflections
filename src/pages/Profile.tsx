@@ -4,12 +4,22 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFamily } from "@/hooks/use-family";
-import { Camera, Loader2, User } from "lucide-react";
+import { Camera, Loader2, User, Download, Trash2, ShieldAlert } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -25,6 +35,53 @@ const Profile = () => {
   const [birthYear, setBirthYear] = useState<string>("");
   const [relationship, setRelationship] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("account-management", {
+        body: { action: "export_data" },
+      });
+      if (error) throw error;
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `my-data-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Your data has been downloaded.");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to export data");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (confirmText !== "DELETE") {
+      toast.error("Please type DELETE to confirm");
+      return;
+    }
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("account-management", {
+        body: { action: "delete_account", confirm: "DELETE" },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success("Your account and data have been deleted.");
+      await supabase.auth.signOut();
+      window.location.href = "/";
+    } catch (e: any) {
+      toast.error(e.message || "Failed to delete account");
+      setDeleting(false);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -223,8 +280,93 @@ const Profile = () => {
         >
           {saving ? "Saving…" : "Save Changes"}
         </Button>
+
+        {/* Privacy & Account — GDPR / CCPA / App Store compliance */}
+        <div className="mt-12 pt-8 border-t border-border space-y-6">
+          <div>
+            <h2 className="text-xl font-display font-bold text-foreground mb-2">
+              Your Data & Privacy
+            </h2>
+            <p className="text-base text-muted-foreground">
+              You have the right to download a copy of your data or delete your account at any time.
+            </p>
+          </div>
+
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full gap-2"
+            onClick={handleExportData}
+            disabled={exporting}
+          >
+            <Download className="w-5 h-5" />
+            {exporting ? "Preparing your data…" : "Download My Data"}
+          </Button>
+
+          <div className="rounded-xl border-2 border-destructive/30 bg-destructive/5 p-5 space-y-3">
+            <div className="flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-display font-bold text-foreground">Delete Account</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Permanently delete your account and all your stories, photos, capsules, and likes.
+                  This cannot be undone.
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="destructive"
+              size="lg"
+              className="w-full gap-2"
+              onClick={() => {
+                setConfirmText("");
+                setShowDeleteDialog(true);
+              }}
+            >
+              <Trash2 className="w-5 h-5" />
+              Delete My Account
+            </Button>
+          </div>
+        </div>
       </div>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete your account permanently?</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <span className="block">
+                This will permanently delete your account, your stories, photos, audio recordings,
+                memory capsules, and likes. Family members you invited will remain.
+              </span>
+              <span className="block font-semibold text-foreground pt-2">
+                Type <span className="font-mono">DELETE</span> below to confirm.
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder="Type DELETE"
+            className="h-12 text-base"
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeleteAccount();
+              }}
+              disabled={deleting || confirmText !== "DELETE"}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "Deleting…" : "Delete Forever"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageLayout>
   );
 };
