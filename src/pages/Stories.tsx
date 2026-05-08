@@ -89,14 +89,35 @@ const Stories = () => {
       <PageHeader title="Family Stories" />
 
       <div className="roots-container mt-6 space-y-4">
+        <div className="flex items-center justify-between text-sm">
+          <p className="text-muted-foreground">
+            <span className="font-semibold text-foreground">{stories.length}</span> of 50 stories used
+            {stories.length >= 45 && stories.length < 50 && (
+              <span className="ml-2 text-amber-600 dark:text-amber-400">
+                — {50 - stories.length} left in beta
+              </span>
+            )}
+            {stories.length >= 50 && (
+              <span className="ml-2 text-destructive font-semibold">— Beta limit reached</span>
+            )}
+          </p>
+        </div>
+
         <Button
           size="lg"
           className="w-full gap-2"
           onClick={() => setShowForm(true)}
+          disabled={stories.length >= 50}
         >
           <Plus className="w-5 h-5" />
-          Share a New Story
+          {stories.length >= 50 ? "Beta limit reached (50)" : "Share a New Story"}
         </Button>
+
+        {stories.length >= 50 && (
+          <p className="text-sm text-muted-foreground text-center">
+            Beta families are limited to 50 stories. Upgrade options coming soon.
+          </p>
+        )}
 
         {stories.length === 0 ? (
           <div className="roots-card text-center py-12 space-y-3">
