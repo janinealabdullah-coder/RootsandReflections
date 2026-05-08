@@ -20,6 +20,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [policyAgreed, setPolicyAgreed] = useState(false);
   const searchParams = new URLSearchParams(window.location.search);
   const nextUrl = searchParams.get("next") || "/family-select";
 
@@ -211,7 +212,52 @@ const Auth = () => {
             </label>
           )}
 
-          <Button size="xl" className="w-full" disabled={loading || (isSignUp && !ageConfirmed)}>
+          {isSignUp && (
+            <div className="space-y-3">
+              <div className="rounded-lg border border-border bg-background/50 p-4 max-h-40 overflow-y-auto text-sm text-muted-foreground leading-relaxed space-y-3">
+                <div>
+                  <p className="font-semibold text-foreground">Terms of Service</p>
+                  <p>
+                    By creating an account, you agree to use Roots & Reflections to share family
+                    stories respectfully. You are responsible for the content you post and for
+                    keeping your login credentials secure. We may suspend accounts that violate
+                    these terms or applicable laws.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Privacy Policy</p>
+                  <p>
+                    Your stories, photos, and family data are private and visible only to members
+                    of your family group. We store data securely and never sell it. You can
+                    download or delete your account and data at any time from your Profile page
+                    (GDPR / CCPA).
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Community Guidelines</p>
+                  <p>
+                    Be kind. No harassment, hate speech, or content that exploits minors. Report
+                    issues to the family admin or contact support. Beta accounts are limited to
+                    10 family members and 50 stories.
+                  </p>
+                </div>
+              </div>
+              <label className="flex items-start gap-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={policyAgreed}
+                  onChange={(e) => setPolicyAgreed(e.target.checked)}
+                  className="mt-1 h-5 w-5 shrink-0 rounded border-input accent-primary cursor-pointer"
+                />
+                <span className="text-base text-foreground leading-snug">
+                  I have read and agree to the Terms of Service, Privacy Policy, and Community
+                  Guidelines.
+                </span>
+              </label>
+            </div>
+          )}
+
+          <Button size="xl" className="w-full" disabled={loading || (isSignUp && (!ageConfirmed || !policyAgreed))}>
             {loading
               ? "Please wait..."
               : isSignUp
