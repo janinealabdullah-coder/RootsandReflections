@@ -93,17 +93,30 @@ const HamburgerMenu = () => {
             })}
 
             {isAdmin && (
-              <button
-                onClick={() => handleNav("/admin")}
-                className={`flex items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/60 ${
-                  location.pathname === "/admin"
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-foreground"
-                }`}
-              >
-                <Shield className="w-5 h-5 shrink-0" />
-                <span>Admin</span>
-              </button>
+              <>
+                <button
+                  onClick={() => handleNav("/admin")}
+                  className={`flex items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/60 ${
+                    location.pathname === "/admin"
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-foreground"
+                  }`}
+                >
+                  <Shield className="w-5 h-5 shrink-0" />
+                  <span>Admin</span>
+                </button>
+                <button
+                  onClick={() => handleNav("/admin/flags")}
+                  className={`flex items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/60 ${
+                    location.pathname === "/admin/flags"
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-foreground"
+                  }`}
+                >
+                  <Flag className="w-5 h-5 shrink-0" />
+                  <span>Flagged Stories</span>
+                </button>
+              </>
             )}
 
             <div className="border-t my-2" />
