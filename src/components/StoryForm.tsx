@@ -215,6 +215,23 @@ const StoryForm = ({
 
     setSubmitting(true);
     try {
+      // Beta limit: max 50 stories per family (frontend check)
+      const { count: storyCount } = await supabase
+        .from("stories")
+        .select("id", { count: "exact", head: true })
+        .eq("family_id", familyId);
+
+      if ((storyCount ?? 0) >= 50) {
+        toast({
+          title: "Story limit reached",
+          description:
+            "This family has reached the 50-story limit for the beta. The family admin can upgrade to add more.",
+          variant: "destructive",
+        });
+        setSubmitting(false);
+        return;
+      }
+
       // Upload photos
       const photoUrls: string[] = [];
       for (const photo of photos) {
