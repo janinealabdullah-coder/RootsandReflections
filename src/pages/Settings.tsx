@@ -155,6 +155,7 @@ const Settings = () => {
     <PageLayout>
       <PageHeader title="Settings" />
       <div className="roots-container mt-6 space-y-8 pb-10">
+        <InstallAppCard />
         {/* Rename Family */}
         <section className="roots-card space-y-4">
           <div className="flex items-center gap-2">
