@@ -132,12 +132,13 @@ const Settings = () => {
     );
   }
 
-  if (!isAdmin) {
-    return (
-      <PageLayout>
-        <PageHeader title="Settings" />
-        <div className="roots-container mt-6 space-y-8 pb-10">
-          <InstallAppCard />
+  return (
+    <PageLayout>
+      <PageHeader title="Settings" />
+      <div className="roots-container mt-6 space-y-8 pb-10">
+        <InstallAppCard />
+
+        {!isAdmin && (
           <div className="text-center space-y-4">
             <p className="text-muted-foreground text-lg">
               Only the family admin can manage family settings.
@@ -146,23 +147,17 @@ const Settings = () => {
               Back to Home
             </Button>
           </div>
-        </div>
-      </PageLayout>
-    );
-  }
+        )}
 
-  return (
-    <PageLayout>
-      <PageHeader title="Settings" />
-      <div className="roots-container mt-6 space-y-8 pb-10">
-        <InstallAppCard />
-        {/* Rename Family */}
-        <section className="roots-card space-y-4">
-          <div className="flex items-center gap-2">
-            <Crown className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-display font-bold text-foreground">Family Name</h2>
-          </div>
-          <div className="space-y-2">
+        {isAdmin && (
+          <>
+            {/* Rename Family */}
+            <section className="roots-card space-y-4">
+              <div className="flex items-center gap-2">
+                <Crown className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-display font-bold text-foreground">Family Name</h2>
+              </div>
+              <div className="space-y-2">
             <Label htmlFor="family-name">Name</Label>
             <Input
               id="family-name"
