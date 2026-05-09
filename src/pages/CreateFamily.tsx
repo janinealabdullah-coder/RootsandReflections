@@ -259,6 +259,8 @@ const CreateFamily = () => {
               </p>
             </div>
 
+            <InstallAppCard />
+
             <div className="space-y-3">
               <Button
                 size="xl"
