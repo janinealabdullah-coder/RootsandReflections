@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Save, Crown, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import InstallAppCard from "@/components/InstallAppCard";
 
 interface Member {
   id: string;
