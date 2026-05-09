@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Save, Crown, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import InstallAppCard from "@/components/InstallAppCard";
 
 interface Member {
   id: string;
@@ -135,13 +136,16 @@ const Settings = () => {
     return (
       <PageLayout>
         <PageHeader title="Settings" />
-        <div className="roots-container mt-10 text-center space-y-4">
-          <p className="text-muted-foreground text-lg">
-            Only the family admin can access settings.
-          </p>
-          <Button variant="outline" onClick={() => navigate("/home")}>
-            Back to Home
-          </Button>
+        <div className="roots-container mt-6 space-y-8 pb-10">
+          <InstallAppCard />
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground text-lg">
+              Only the family admin can manage family settings.
+            </p>
+            <Button variant="outline" onClick={() => navigate("/home")}>
+              Back to Home
+            </Button>
+          </div>
         </div>
       </PageLayout>
     );
@@ -151,6 +155,7 @@ const Settings = () => {
     <PageLayout>
       <PageHeader title="Settings" />
       <div className="roots-container mt-6 space-y-8 pb-10">
+        <InstallAppCard />
         {/* Rename Family */}
         <section className="roots-card space-y-4">
           <div className="flex items-center gap-2">
