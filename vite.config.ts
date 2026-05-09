@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false,
       },
-      includeAssets: ["icon-192.png", "icon-512.png"],
+      includeAssets: ["icon-192.png", "icon-512.png", "offline.html"],
       manifest: {
         name: "Roots & Reflections",
         short_name: "Roots",
@@ -62,6 +62,7 @@ export default defineConfig(({ mode }) => ({
             options: {
               cacheName: "html-cache",
               networkTimeoutSeconds: 3,
+              precacheFallback: { fallbackURL: "/offline.html" },
             },
           },
           {
