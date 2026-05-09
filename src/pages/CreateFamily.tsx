@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Users, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import InstallAppCard from "@/components/InstallAppCard";
 
 const CreateFamily = () => {
   const navigate = useNavigate();
