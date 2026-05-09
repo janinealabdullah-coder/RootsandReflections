@@ -262,6 +262,9 @@ const JoinFamily = () => {
             >
               Enter Family Home
             </Button>
+            <div className="w-full max-w-sm pt-2 text-left">
+              <InstallAppCard />
+            </div>
           </div>
         )}
       </div>
