@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import InstallAppCard from "@/components/InstallAppCard";
 
 const JoinFamily = () => {
   const navigate = useNavigate();
@@ -261,6 +262,9 @@ const JoinFamily = () => {
             >
               Enter Family Home
             </Button>
+            <div className="w-full max-w-sm pt-2 text-left">
+              <InstallAppCard />
+            </div>
           </div>
         )}
       </div>

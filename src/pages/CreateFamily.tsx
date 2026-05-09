@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Users, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import InstallAppCard from "@/components/InstallAppCard";
 
 const CreateFamily = () => {
   const navigate = useNavigate();
@@ -257,6 +258,8 @@ const CreateFamily = () => {
                 Beta families are limited to 10 members. Upgrade options coming soon.
               </p>
             </div>
+
+            <InstallAppCard />
 
             <div className="space-y-3">
               <Button
