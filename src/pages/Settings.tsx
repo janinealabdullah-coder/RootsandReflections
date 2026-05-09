@@ -231,6 +231,8 @@ const Settings = () => {
             })}
           </div>
         </section>
+          </>
+        )}
       </div>
     </PageLayout>
   );
